@@ -2,14 +2,16 @@
 
 import { useFormStatus } from "react-dom";
 
+import { Button } from "@/components/retroui/Button";
+
 export function SubmitButton() {
   const { pending } = useFormStatus();
 
   return (
-    <button
+    <Button
       type="submit"
       disabled={pending}
-      className="relative inline-flex w-full items-center justify-center gap-3 rounded-[12px] bg-[color:var(--color-saffron)] px-4 py-3.5 text-sm font-semibold text-white shadow-warm transition-all duration-200 hover:-translate-y-[1px] hover:bg-[color:var(--color-saffron-dark)] hover:shadow-[0_6px_24px_rgba(232,100,10,0.35)] disabled:opacity-70 disabled:cursor-not-allowed disabled:translate-y-0"
+      className="relative w-full gap-3 rounded-[14px] border-2 border-(--color-border) bg-saffron px-4 py-3.5 text-sm font-semibold text-white shadow-[4px_4px_0_0_var(--border)] transition-all duration-200 hover:-translate-y-px hover:bg-saffron-dark disabled:cursor-not-allowed disabled:opacity-70 disabled:hover:translate-y-0"
     >
       {pending ? (
         <>
@@ -22,6 +24,6 @@ export function SubmitButton() {
       ) : (
         "Submit Registration →"
       )}
-    </button>
+    </Button>
   );
 }

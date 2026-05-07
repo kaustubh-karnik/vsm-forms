@@ -1,6 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import { Alert } from "@/components/retroui/Alert";
+import { Badge } from "@/components/retroui/Badge";
+import { Card } from "@/components/retroui/Card";
+import { Text } from "@/components/retroui/Text";
+import { BarChart } from "@/components/retroui/charts/BarChart";
+import { PieChart } from "@/components/retroui/charts/PieChart";
 import {
   type FormField,
   type Team,
@@ -116,7 +122,7 @@ export function VsmLogo({
         alt="Vivekanand Seva Mandal logo"
         width={imageSize}
         height={imageSize}
-        className="object-contain"
+        className="h-auto w-auto object-contain"
       />
     </span>
   );
@@ -425,12 +431,18 @@ export function DashboardHeader({
       <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[color:var(--color-muted)]">
         {eyebrow}
       </p>
-      <h1 className="mt-2 font-serif text-[clamp(2rem,4vw,3rem)] leading-tight text-[color:var(--color-dark)]">
+      <Text
+        as="h1"
+        className="mt-2 text-[clamp(2rem,4vw,3rem)] leading-tight text-[color:var(--color-dark)]"
+      >
         {title}
-      </h1>
-      <p className="mt-3 max-w-3xl text-sm leading-7 text-[color:var(--color-muted)]">
+      </Text>
+      <Text
+        as="p"
+        className="mt-3 max-w-3xl text-sm leading-7 text-[color:var(--color-muted)]"
+      >
         {description}
-      </p>
+      </Text>
     </header>
   );
 }
@@ -443,11 +455,11 @@ export function AdminCard({
   className?: string;
 }) {
   return (
-    <section
-      className={`fade-up fade-up-2 rounded-[24px] border border-[color:var(--color-border)] bg-[color:var(--color-card)] p-5 shadow-warm sm:p-6 ${className}`}
+    <Card
+      className={`fade-up fade-up-2 block w-full rounded-[24px] border-2 border-[color:var(--color-border)] bg-[color:var(--color-card)] p-5 shadow-[4px_4px_0_0_var(--border)] transition-all sm:p-6 ${className}`}
     >
       {children}
-    </section>
+    </Card>
   );
 }
 
@@ -459,12 +471,12 @@ export function StatsCard({
   value: number;
 }) {
   return (
-    <article className="fade-up fade-up-2 rounded-[22px] border border-[color:var(--color-border)] bg-white p-5 shadow-warm">
-      <p className="font-serif text-4xl text-[color:var(--color-saffron)]">
+    <Card className="fade-up fade-up-2 block rounded-[22px] border-2 border-[color:var(--color-border)] bg-white p-5 shadow-[4px_4px_0_0_var(--border)]">
+      <p className="text-4xl text-[color:var(--color-saffron)]">
         {value}
       </p>
       <p className="mt-2 text-sm text-[color:var(--color-muted)]">{label}</p>
-    </article>
+    </Card>
   );
 }
 
@@ -479,9 +491,18 @@ export function FormListRow({ form }: { form: VSMForm }) {
             <h3 className="font-serif text-xl text-[color:var(--color-dark)]">
               {form.title}
             </h3>
-            <span className="inline-flex rounded-full bg-[color:rgba(232,100,10,0.08)] px-3 py-1 text-xs font-semibold text-[color:var(--color-saffron)]">
+            <Badge
+              size="sm"
+              className={
+                form.status === "active"
+                  ? "bg-[rgba(21,128,61,0.1)] text-[#166534] outline outline-1 outline-[rgba(21,128,61,0.25)]"
+                  : form.status === "draft"
+                    ? "bg-[rgba(232,100,10,0.08)] text-[color:var(--color-saffron)] outline outline-1 outline-[rgba(232,100,10,0.2)]"
+                    : "bg-[rgba(107,91,69,0.08)] text-[color:var(--color-muted)] outline outline-1 outline-[rgba(107,91,69,0.2)]"
+              }
+            >
               {getStatusLabel(form.status)}
-            </span>
+            </Badge>
             <TeamBadge team={form.team} />
           </div>
           <p className="text-sm text-[color:var(--color-muted)]">
@@ -679,8 +700,6 @@ export function BarChartCard({
 }: {
   data: Array<{ month: string; count: number }>;
 }) {
-  const max = Math.max(...data.map((item) => item.count), 1);
-
   return (
     <AdminCard>
       <h2 className="font-serif text-2xl text-[color:var(--color-dark)]">
@@ -690,27 +709,16 @@ export function BarChartCard({
         Monthly response volume across your current working set.
       </p>
 
-      <div className="mt-6 grid grid-cols-6 items-end gap-4 rounded-[20px] border border-[color:var(--color-border)] bg-white p-5">
-        {data.map((item) => (
-          <div key={item.month} className="flex flex-col items-center gap-3">
-            <div className="flex h-[220px] items-end">
-              <div
-                className="w-10 rounded-t-[12px] bg-[color:var(--color-saffron)] shadow-warm"
-                style={{
-                  height: `${Math.max((item.count / max) * 100, 12)}%`,
-                }}
-              />
-            </div>
-            <div className="text-center">
-              <p className="text-sm font-semibold text-[color:var(--color-dark)]">
-                {item.count}
-              </p>
-              <p className="text-xs text-[color:var(--color-muted)]">
-                {item.month}
-              </p>
-            </div>
-          </div>
-        ))}
+      <div className="mt-6 overflow-hidden rounded-[20px] border border-[color:var(--color-border)] bg-white p-5">
+        <BarChart
+          data={data}
+          index="month"
+          categories={["count"]}
+          fillColors={["#E8640A"]}
+          strokeColors={["#C2500A"]}
+          gridColor="#E8DDD0"
+          className="h-[240px]"
+        />
       </div>
     </AdminCard>
   );
@@ -722,26 +730,8 @@ export function DonutChartCard({
   data: Array<{ team: Team; count: number }>;
 }) {
   const total = data.reduce((sum, item) => sum + item.count, 0) || 1;
-  const segments = data.reduce<
-    Array<{ team: Team; start: number; end: number }>
-  >((acc, item) => {
-    const previous = acc.at(-1)?.end ?? 0;
-    const next = previous + (item.count / total) * 360;
-
-    acc.push({
-      team: item.team,
-      start: previous,
-      end: next,
-    });
-
-    return acc;
-  }, []);
-  const gradients = segments
-    .map(
-      (segment) =>
-        `${TEAM_DOTS[segment.team]} ${segment.start}deg ${segment.end}deg`,
-    )
-    .join(", ");
+  const pieData = data.map((item) => ({ name: item.team, count: item.count }));
+  const colors = data.map((item) => TEAM_DOTS[item.team]);
 
   return (
     <AdminCard>
@@ -754,11 +744,16 @@ export function DonutChartCard({
 
       <div className="mt-6 grid gap-6 md:grid-cols-[220px_minmax(0,1fr)] md:items-center">
         <div className="relative mx-auto h-[220px] w-[220px]">
-          <div
-            className="h-full w-full rounded-full"
-            style={{ background: `conic-gradient(${gradients})` }}
+          <PieChart
+            data={pieData}
+            dataKey="count"
+            nameKey="name"
+            colors={colors}
+            innerRadius={62}
+            outerRadius={100}
+            className="h-[220px] w-[220px]"
           />
-          <div className="absolute inset-[28px] flex items-center justify-center rounded-full bg-[color:var(--color-card)]">
+          <div className="pointer-events-none absolute inset-[44px] flex items-center justify-center rounded-full bg-[color:var(--color-card)]">
             <div className="text-center">
               <p className="font-serif text-3xl text-[color:var(--color-saffron)]">
                 {total}

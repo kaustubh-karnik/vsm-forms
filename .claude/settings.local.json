@@ -8,7 +8,13 @@
       "Bash(npx tsc *)",
       "Bash(npm run *)",
       "WebFetch(domain:vsmandal.org)",
-      "Bash(npx next *)"
+      "Bash(npx next *)",
+      "mcp__shadcn__list_items_in_registries",
+      "mcp__shadcn__get_add_command_for_items",
+      "mcp__shadcn__view_items_in_registries",
+      "mcp__shadcn__get_item_examples_from_registries",
+      "Bash(node -e \"const p=require\\('./package.json'\\); console.log\\('recharts:', p.dependencies?.recharts ?? 'not found'\\); console.log\\('vaul:', p.dependencies?.vaul ?? 'not found'\\);\")",
+      "Bash(npx shadcn@latest add @retroui/badge @retroui/alert @retroui/progress @retroui/breadcrumb @retroui/bar-chart @retroui/pie-chart @retroui/drawer @retroui/avatar @retroui/loader @retroui/toggle-group --yes)"
     ]
   }
 }

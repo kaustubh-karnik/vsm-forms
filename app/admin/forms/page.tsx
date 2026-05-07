@@ -1,6 +1,8 @@
 import Link from "next/link";
 
-import { AdminCard, DashboardHeader, FormListRow, TeamBadge } from "@/app/components/vsm-ui";
+import { AdminCard, DashboardHeader, FormListRow } from "@/app/components/vsm-ui";
+import { Alert } from "@/components/retroui/Alert";
+import { Breadcrumb } from "@/components/retroui/Breadcrumb";
 import { getAllForms } from "@/lib/supabase";
 
 export default async function AdminFormsPage() {
@@ -12,11 +14,24 @@ export default async function AdminFormsPage() {
   return (
     <main className="p-4 sm:p-6 lg:p-8">
       <div className="space-y-6">
-        <DashboardHeader
-          eyebrow="Admin / My Forms"
-          title="All Forms"
-          description="Manage active, draft, and closed initiatives. Click Edit to modify fields or Publish to make a form live."
-        />
+        <header className="fade-up fade-up-1 space-y-3">
+          <Breadcrumb>
+            <Breadcrumb.List>
+              <Breadcrumb.Item>
+                <Breadcrumb.Link href="/admin">Dashboard</Breadcrumb.Link>
+              </Breadcrumb.Item>
+              <Breadcrumb.Separator />
+              <Breadcrumb.Item>
+                <Breadcrumb.Page>Forms</Breadcrumb.Page>
+              </Breadcrumb.Item>
+            </Breadcrumb.List>
+          </Breadcrumb>
+          <DashboardHeader
+            eyebrow=""
+            title="All Forms"
+            description="Manage active, draft, and closed initiatives. Click Edit to modify fields or Publish to make a form live."
+          />
+        </header>
 
         <AdminCard>
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -33,7 +48,14 @@ export default async function AdminFormsPage() {
           </div>
 
           {active.length === 0 ? (
-            <EmptyState message="No active forms yet." />
+            <div className="mt-5">
+              <Alert className="rounded-[16px]">
+                <Alert.Title>No active forms</Alert.Title>
+                <Alert.Description>
+                  Create a new form and publish it to see it here.
+                </Alert.Description>
+              </Alert>
+            </div>
           ) : (
             <div className="mt-5 space-y-4">
               {active.map((form) => <FormListRow key={form.id} form={form} />)}
@@ -60,18 +82,5 @@ export default async function AdminFormsPage() {
         )}
       </div>
     </main>
-  );
-}
-
-function EmptyState({ message }: { message: string }) {
-  return (
-    <div className="mt-5 flex flex-col items-center gap-4 rounded-[20px] border border-dashed border-[color:var(--color-border)] py-12 text-center">
-      <div className="flex h-14 w-14 items-center justify-center rounded-full bg-[color:rgba(232,100,10,0.07)]">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-7 w-7 text-[color:var(--color-saffron)]" aria-hidden>
-          <path d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9z" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
-      </div>
-      <p className="text-sm text-[color:var(--color-muted)]">{message}</p>
-    </div>
   );
 }

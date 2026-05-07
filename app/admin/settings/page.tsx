@@ -1,14 +1,39 @@
+"use client";
+
+import { useState } from "react";
+
 import { AdminCard, DashboardHeader } from "@/app/components/vsm-ui";
+import { Breadcrumb } from "@/components/retroui/Breadcrumb";
+import { Switch } from "@/components/retroui/Switch";
 
 export default function SettingsPage() {
+  const [notifications, setNotifications] = useState({
+    onSubmission: true,
+    dailyDigest: true,
+    closingReminders: false,
+  });
+
   return (
     <main className="p-4 sm:p-6 lg:p-8">
       <div className="space-y-6">
-        <DashboardHeader
-          eyebrow="Admin / Settings"
-          title="Settings"
-          description="Manage your profile, team preferences, and notification settings."
-        />
+        <header className="fade-up fade-up-1 space-y-3">
+          <Breadcrumb>
+            <Breadcrumb.List>
+              <Breadcrumb.Item>
+                <Breadcrumb.Link href="/admin">Dashboard</Breadcrumb.Link>
+              </Breadcrumb.Item>
+              <Breadcrumb.Separator />
+              <Breadcrumb.Item>
+                <Breadcrumb.Page>Settings</Breadcrumb.Page>
+              </Breadcrumb.Item>
+            </Breadcrumb.List>
+          </Breadcrumb>
+          <DashboardHeader
+            eyebrow=""
+            title="Settings"
+            description="Manage your profile, team preferences, and notification settings."
+          />
+        </header>
 
         <AdminCard>
           <h2 className="font-serif text-2xl text-[color:var(--color-dark)]">Profile</h2>
@@ -41,24 +66,38 @@ export default function SettingsPage() {
           </p>
           <div className="mt-5 space-y-3">
             {[
-              { label: "Email me on new submission", sublabel: "Receive an email for every new response" },
-              { label: "Daily digest summary", sublabel: "One summary email each morning with yesterday's count" },
-              { label: "Form closing reminders", sublabel: "Notify me 3 days before a form closes" },
+              {
+                key: "onSubmission" as const,
+                label: "Email me on new submission",
+                sublabel: "Receive an email for every new response",
+              },
+              {
+                key: "dailyDigest" as const,
+                label: "Daily digest summary",
+                sublabel: "One summary email each morning with yesterday's count",
+              },
+              {
+                key: "closingReminders" as const,
+                label: "Form closing reminders",
+                sublabel: "Notify me 3 days before a form closes",
+              },
             ].map((item) => (
-              <label
-                key={item.label}
-                className="flex cursor-pointer items-start justify-between gap-4 rounded-[16px] border border-[color:var(--color-border)] bg-white px-4 py-3.5"
+              <div
+                key={item.key}
+                className="flex cursor-pointer items-center justify-between gap-4 rounded-[16px] border border-[color:var(--color-border)] bg-white px-4 py-3.5"
               >
                 <div>
                   <p className="text-sm font-medium text-[color:var(--color-dark)]">{item.label}</p>
                   <p className="mt-0.5 text-xs text-[color:var(--color-muted)]">{item.sublabel}</p>
                 </div>
-                <div className="relative mt-0.5 shrink-0">
-                  <input type="checkbox" defaultChecked className="peer sr-only" />
-                  <div className="h-5 w-9 rounded-full border border-[color:var(--color-border)] bg-[color:var(--color-border)] transition-colors peer-checked:border-[color:var(--color-saffron)] peer-checked:bg-[color:var(--color-saffron)]" />
-                  <div className="absolute left-0.5 top-0.5 h-4 w-4 rounded-full bg-white shadow transition-transform peer-checked:translate-x-4" />
-                </div>
-              </label>
+                <Switch
+                  checked={notifications[item.key]}
+                  onCheckedChange={(checked) =>
+                    setNotifications((prev) => ({ ...prev, [item.key]: checked }))
+                  }
+                  aria-label={item.label}
+                />
+              </div>
             ))}
           </div>
         </AdminCard>

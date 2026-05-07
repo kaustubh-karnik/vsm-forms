@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { AdminCard, FormListRow, StatsCard } from "@/app/components/vsm-ui";
+import { Breadcrumb } from "@/components/retroui/Breadcrumb";
 import { getAllForms } from "@/lib/supabase";
 
 function getGreeting() {
@@ -26,14 +27,22 @@ export default async function AdminDashboardPage() {
       <div className="space-y-6">
 
         {/* Greeting header */}
-        <header className="fade-up fade-up-1">
-          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[color:var(--color-muted)]">
-            Admin Dashboard
-          </p>
-          <h1 className="mt-2 font-serif text-[clamp(1.75rem,3.5vw,2.5rem)] leading-tight text-[color:var(--color-dark)]">
+        <header className="fade-up fade-up-1 space-y-3">
+          <Breadcrumb>
+            <Breadcrumb.List>
+              <Breadcrumb.Item>
+                <Breadcrumb.Link href="/">Public site</Breadcrumb.Link>
+              </Breadcrumb.Item>
+              <Breadcrumb.Separator />
+              <Breadcrumb.Item>
+                <Breadcrumb.Page>Dashboard</Breadcrumb.Page>
+              </Breadcrumb.Item>
+            </Breadcrumb.List>
+          </Breadcrumb>
+          <h1 className="font-serif text-[clamp(1.75rem,3.5vw,2.5rem)] leading-tight text-[color:var(--color-dark)]">
             {greeting} 🙏
           </h1>
-          <p className="mt-2 text-sm leading-6 text-[color:var(--color-muted)]">
+          <p className="text-sm leading-6 text-[color:var(--color-muted)]">
             Here's a live snapshot of your forms, responses, and team activity.
           </p>
         </header>

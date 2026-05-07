@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { AdminSidebar } from "@/app/components/admin-sidebar";
+import { AdminMobileNav } from "@/app/components/admin-mobile-nav";
 import { VsmLogo } from "@/app/components/vsm-ui";
 
 export default function AdminLayout({
@@ -11,18 +12,17 @@ export default function AdminLayout({
   return (
     <div className="min-h-screen bg-[color:var(--color-cream)] text-[color:var(--color-dark)]">
       <div className="mx-auto flex min-h-screen w-full max-w-[1400px] flex-col lg:flex-row">
-        {/* Sidebar */}
-        <aside className="shrink-0 border-b border-[color:var(--color-border)] bg-[color:rgba(255,250,243,0.95)] lg:w-[260px] lg:border-b-0 lg:border-r">
-          <div className="sticky top-0 flex h-full flex-col p-5">
-            {/* Logo */}
-            <Link href="/" className="flex items-center gap-3 group">
+        {/* Mobile top nav (hamburger + drawer) */}
+        <AdminMobileNav />
+
+        {/* Desktop sidebar */}
+        <aside className="hidden shrink-0 border-r border-[color:var(--color-border)] bg-[color:rgba(255,250,243,0.95)] lg:flex lg:w-[260px]">
+          <div className="sticky top-0 flex h-screen w-full flex-col p-5">
+            <Link href="/" className="group flex items-center gap-3">
               <VsmLogo size={44} tone="warm" />
               <div>
                 <p className="font-serif text-[17px] leading-tight text-[color:var(--color-saffron)]">
-                  <span className="inline-flex items-center gap-2">
-                    <VsmLogo size={18} tone="warm" shadow={false} />
-                    <span>Admin</span>
-                  </span>
+                  VSM Admin
                 </p>
                 <p className="text-[11px] text-[color:var(--color-muted)]">Vivekanand Seva Mandal</p>
               </div>
@@ -30,7 +30,6 @@ export default function AdminLayout({
 
             <AdminSidebar />
 
-            {/* Bottom divider + back link */}
             <div className="mt-auto pt-6">
               <div className="h-px bg-[color:var(--color-border)]" />
               <Link

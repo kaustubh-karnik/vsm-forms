@@ -2,6 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 
+import { Button } from "@/components/retroui/Button";
+
 export function FileInputField({
   id,
   name,
@@ -39,10 +41,10 @@ export function FileInputField({
   return (
     <div className="space-y-3">
       <label
-        className={`flex cursor-pointer flex-col items-center gap-2 rounded-[12px] border border-dashed px-4 py-6 text-center text-sm text-[color:var(--color-muted)] transition-colors ${
+        className={`flex cursor-pointer flex-col items-center gap-2 rounded-xl border border-dashed px-4 py-6 text-center text-sm text-muted transition-colors ${
           isDragging
-            ? "border-[color:rgba(232,100,10,0.5)] bg-[color:rgba(232,100,10,0.08)]"
-            : "border-[color:var(--color-border)] bg-white hover:border-[color:rgba(232,100,10,0.3)] hover:bg-[color:rgba(232,100,10,0.03)]"
+            ? "border-[rgba(232,100,10,0.5)] bg-[rgba(232,100,10,0.08)]"
+            : "border-border bg-white hover:border-[rgba(232,100,10,0.3)] hover:bg-[rgba(232,100,10,0.03)]"
         }`}
         onDragOver={(event) => {
           event.preventDefault();
@@ -68,13 +70,13 @@ export function FileInputField({
           }
         }}
       >
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-7 w-7 text-[color:var(--color-border)]" aria-hidden>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-7 w-7 text-border" aria-hidden>
           <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" strokeLinecap="round" strokeLinejoin="round" />
           <polyline points="17 8 12 3 7 8" strokeLinecap="round" strokeLinejoin="round" />
           <line x1="12" y1="3" x2="12" y2="15" strokeLinecap="round" />
         </svg>
         <span>
-          <span className="font-medium text-[color:var(--color-saffron)]">Click to upload</span> or drag and drop
+          <span className="font-medium text-saffron">Click to upload</span> or drag and drop
         </span>
         <input
           key={inputKey}
@@ -92,17 +94,17 @@ export function FileInputField({
         />
       </label>
 
-      <div className="rounded-[12px] border border-[color:var(--color-border)] bg-[color:var(--color-card)] px-4 py-3 text-sm text-[color:var(--color-muted)]">
+      <div className="rounded-xl border border-border bg-card px-4 py-3 text-sm text-muted">
         {file ? (
           <div className="flex items-center justify-between gap-3">
             <div className="min-w-0">
-              <p className="truncate font-medium text-[color:var(--color-dark)]">{file.name}</p>
-              <p className="text-xs text-[color:var(--color-muted)]">
+              <p className="truncate font-medium text-dark">{file.name}</p>
+              <p className="text-xs text-muted">
                 {(file.size / 1024).toFixed(1)} KB · Selected
               </p>
             </div>
             <div className="flex items-center gap-2">
-              <button
+              <Button
                 type="button"
                 onClick={() => {
                   setFile(null);
@@ -111,16 +113,18 @@ export function FileInputField({
                     inputRef.current.value = "";
                   }
                 }}
-                className="rounded-[10px] border border-[color:var(--color-border)] px-3 py-1.5 text-xs font-semibold text-[color:var(--color-muted)] transition-colors hover:border-[color:rgba(232,100,10,0.22)] hover:text-[color:var(--color-saffron)]"
+                variant="outline"
+                size="sm"
+                className="rounded-[10px] border-border px-3 py-1.5 text-xs font-semibold text-muted transition-colors hover:border-[rgba(232,100,10,0.22)] hover:text-saffron"
               >
                 Remove
-              </button>
+              </Button>
               {previewUrl && (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
                   src={previewUrl}
                   alt="Selected upload preview"
-                  className="h-14 w-14 shrink-0 rounded-[10px] border border-[color:var(--color-border)] object-cover"
+                  className="h-14 w-14 shrink-0 rounded-[10px] border border-border object-cover"
                 />
               )}
             </div>

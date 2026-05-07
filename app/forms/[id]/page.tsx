@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { submitForm } from "@/app/actions/submit-form";
+import { FileInputField } from "@/app/forms/[id]/file-input";
 import { SubmitButton } from "@/app/forms/[id]/submit-button";
 import {
   DeadlinePill,
@@ -160,17 +161,9 @@ function FormFieldInput({ field }: { field: FormField }) {
       <div>
         <FieldLabel field={field} />
         <HelpText text={field.helpText} />
-        <label className="mt-2 flex cursor-pointer flex-col items-center gap-2 rounded-[12px] border border-dashed border-[color:var(--color-border)] bg-white px-4 py-6 text-center text-sm text-[color:var(--color-muted)] transition-colors hover:border-[color:rgba(232,100,10,0.3)] hover:bg-[color:rgba(232,100,10,0.03)]">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-7 w-7 text-[color:var(--color-border)]" aria-hidden>
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" strokeLinecap="round" strokeLinejoin="round" />
-            <polyline points="17 8 12 3 7 8" strokeLinecap="round" strokeLinejoin="round" />
-            <line x1="12" y1="3" x2="12" y2="15" strokeLinecap="round" />
-          </svg>
-          <span>
-            <span className="font-medium text-[color:var(--color-saffron)]">Click to upload</span> or drag and drop
-          </span>
-          <input id={field.id} name={field.label} type="file" className="sr-only" required={field.required} />
-        </label>
+        <div className="mt-2">
+          <FileInputField id={field.id} name={field.label} required={field.required} />
+        </div>
       </div>
     );
   }

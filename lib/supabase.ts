@@ -1,3 +1,4 @@
+import { randomUUID } from 'crypto';
 import { createClient } from '@supabase/supabase-js';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -102,7 +103,25 @@ export async function getAllForms(): Promise<VSMForm[]> {
     .order('createdAt', { ascending: false });
 
   if (error) throw error;
-  return data || [];
+
+  const { data: responses, error: responsesError } = await supabase
+    .from('responses')
+    .select('formId');
+
+  if (responsesError) throw responsesError;
+
+  const responseCounts = (responses || []).reduce<Record<string, number>>(
+    (acc, response) => {
+      acc[response.formId] = (acc[response.formId] || 0) + 1;
+      return acc;
+    },
+    {}
+  );
+
+  return (data || []).map((form) => ({
+    ...form,
+    responseCount: responseCounts[form.id] ?? 0,
+  }));
 }
 
 export async function getFormById(id: string): Promise<VSMForm | null> {
@@ -144,7 +163,12 @@ export async function submitFormResponse(
 ): Promise<FormResponse> {
   const { data: newResponse, error } = await supabase
     .from('responses')
-    .insert({ formId, submittedAt: new Date().toISOString(), data })
+    .insert({
+      id: randomUUID(),
+      formId,
+      submittedAt: new Date().toISOString(),
+      data,
+    })
     .select()
     .single();
 

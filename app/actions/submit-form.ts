@@ -14,18 +14,36 @@ export async function submitForm(formId: string, formData: FormData) {
   const checkboxKeys = formData.getAll("_checkboxKeys") as string[];
 
   for (const [key, value] of formData.entries()) {
-    if (key === "_formId" || key === "_checkboxKeys") continue;
+    const isSystemKey =
+      key === "_formId" ||
+      key === "_checkboxKeys" ||
+      key.startsWith("$ACTION") ||
+      key.startsWith("ACTION_") ||
+      key.startsWith("ACTION_REF") ||
+      key.startsWith("ACTION_ID") ||
+      key.startsWith("$ACTION_REF") ||
+      key.startsWith("$ACTION_ID");
 
-    if (value instanceof File) {
-      if (value.size === 0) continue;
+    if (isSystemKey) continue;
 
-      const ext = value.name.split(".").pop() ?? "bin";
+    const isFileValue =
+      typeof value === "object" &&
+      value !== null &&
+      "arrayBuffer" in value &&
+      "name" in value &&
+      "size" in value;
+
+    if (isFileValue) {
+      const file = value as File;
+      if (file.size === 0) continue;
+
+      const ext = file.name.split(".").pop() ?? "bin";
       const path = `${formId}/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
 
-      const bytes = await value.arrayBuffer();
+      const bytes = await file.arrayBuffer();
       const { error } = await supabaseAdmin.storage
         .from(uploadBucket)
-        .upload(path, bytes, { contentType: value.type, upsert: false });
+        .upload(path, bytes, { contentType: file.type, upsert: false });
 
       if (error) throw new Error(`File upload failed: ${error.message}`);
 

@@ -68,11 +68,18 @@ export default async function Home() {
                     key={form.id}
                     className={`fade-up ${delayClass} card-hover overflow-hidden rounded-[22px] border border-[color:var(--color-border)] bg-white`}
                   >
-                    <div className="flex flex-col md:flex-row">
-                      <div className="border-b border-[color:var(--color-border)] md:w-[36%] md:border-b-0 md:border-r lg:w-[30%]">
-                        <FormCover form={form} poster roundedClass="rounded-none" />
+                    <div className="flex flex-col md:grid md:grid-cols-[minmax(0,220px)_minmax(0,1fr)] lg:grid-cols-[minmax(0,240px)_minmax(0,1fr)]">
+                      <div className="border-b border-[color:var(--color-border)] md:border-b-0 md:border-r">
+                        <div className="p-3 sm:p-4">
+                          <FormCover
+                            form={form}
+                            poster
+                            roundedClass="rounded-[16px]"
+                            className="min-h-0 aspect-[4/5] max-h-[220px] shadow-warm ring-1 ring-[color:var(--color-border)] sm:max-h-[240px] md:max-h-[260px]"
+                          />
+                        </div>
                       </div>
-                      <div className="flex h-full flex-1 flex-col gap-4 p-4 md:p-5">
+                      <div className="flex flex-1 flex-col gap-4 p-4 md:p-5">
                         <div className="space-y-3">
                           <div className="flex items-start justify-between gap-3">
                             <div className="min-w-0">

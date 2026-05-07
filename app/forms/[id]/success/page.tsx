@@ -23,6 +23,7 @@ export default async function SuccessPage({
   const confirmationMessage =
     form.settings?.confirmationMessage?.trim() ||
     `Your registration for ${form.title} has been received. Our team will be in touch soon. 🙏`;
+  const hasFileField = form.fields.some((field) => field.type === "file");
 
   const whatsappText = encodeURIComponent(
     `I just registered for ${form.title} by Vivekanand Seva Mandal! Join me: https://vsm-forms.vercel.app/forms/${form.id}`
@@ -54,6 +55,12 @@ export default async function SuccessPage({
               <p className="text-sm leading-7 text-[color:var(--color-muted)]">
                 {confirmationMessage}
               </p>
+              {hasFileField && (
+                <div className="mx-auto mt-4 flex max-w-[420px] items-center justify-center gap-2 rounded-[12px] border border-[color:rgba(21,128,61,0.2)] bg-[color:rgba(21,128,61,0.08)] px-3 py-2 text-xs font-semibold text-[#166534]">
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#15803D]" aria-hidden />
+                  Files uploaded successfully
+                </div>
+              )}
             </div>
 
             <TeamBadge team={form.team} />

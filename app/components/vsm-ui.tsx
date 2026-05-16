@@ -85,7 +85,7 @@ export function SectionDivider({
   return (
     <div className={`flex items-center gap-3 ${className}`}>
       <div className="h-px flex-1 bg-[color:var(--color-border)]" />
-      <span className="lotus-divider px-4 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--color-muted)]">
+      <span className="lotus-divider px-4 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--color-dark)]">
         {label}
       </span>
       <div className="h-px flex-1 bg-[color:var(--color-border)]" />
@@ -100,22 +100,28 @@ export function VsmLogo({
   tone = "neutral",
   shadow = true,
   className = "",
+  withBackground = false,
 }: {
   size?: number;
   tone?: LogoTone;
   shadow?: boolean;
   className?: string;
+  withBackground?: boolean;
 }) {
   const imageSize = Math.max(Math.round(size * 0.68), 12);
-  const toneClass =
+
+  // By default do not force a white background on the logo. Pass `withBackground=true`
+  // to add the white background and border if needed. This avoids white boxes
+  // around logos that already contain their own background transparency.
+  const toneClassBase =
     tone === "warm"
-      ? "border-2 border-[color:rgba(232,100,10,0.18)] bg-white"
-      : "border border-[color:var(--color-border)] bg-white";
+      ? "border-2 border-[color:rgba(232,100,10,0.18)]"
+      : "border border-[color:var(--color-border)]";
 
   return (
     <span
-      className={`inline-flex items-center justify-center rounded-full ${toneClass} ${shadow ? "shadow-warm" : ""} ${className}`}
-      style={{ width: size, height: size }}
+      className={`inline-flex items-center justify-center rounded-full ${withBackground ? "bg-white" : "bg-transparent"} ${toneClassBase} ${shadow ? "shadow-warm" : ""} ${className}`}
+      style={{ width: size, height: size, verticalAlign: "middle" }}
     >
       <Image
         src="/logo.png"
@@ -123,6 +129,9 @@ export function VsmLogo({
         width={imageSize}
         height={imageSize}
         className="h-auto w-auto object-contain"
+        // shrink the visible image inside the circular container so any white canvas
+        // around the artwork doesn't touch the container edge — improves perceived alignment
+        style={{ backgroundColor: "transparent", width: "70%", height: "70%", display: "block" }}
       />
     </span>
   );
@@ -243,6 +252,7 @@ export function FormCover({
   poster = false,
   roundedClass,
   className = "",
+  showOverlay = true,
 }: {
   form: VSMForm;
   compact?: boolean;
@@ -250,13 +260,14 @@ export function FormCover({
   poster?: boolean;
   roundedClass?: string;
   className?: string;
+  showOverlay?: boolean;
 }) {
   const heightClass = compact
     ? "h-full min-h-[96px]"
     : tall
       ? "aspect-[16/9] min-h-[230px]"
       : poster
-        ? "aspect-[420/594] min-h-[180px]"
+        ? "h-full min-h-[120px]"
         : "aspect-[16/9]";
   const radiusClass =
     roundedClass ??
@@ -277,7 +288,7 @@ export function FormCover({
           src={form.coverImageUrl}
           alt={`${form.title} banner`}
           fill
-          className="object-cover"
+          className={poster ? "object-contain" : "object-cover"}
           sizes="(max-width: 768px) 100vw, 680px"
           priority
         />
@@ -290,24 +301,28 @@ export function FormCover({
           <div className="h-full w-full bg-[linear-gradient(45deg,transparent_25%,rgba(255,255,255,0.9)_25%,rgba(255,255,255,0.9)_27%,transparent_27%,transparent_50%,rgba(255,255,255,0.9)_50%,rgba(255,255,255,0.9)_52%,transparent_52%,transparent_75%,rgba(255,255,255,0.9)_75%,rgba(255,255,255,0.9)_77%,transparent_77%)] bg-[length:48px_48px]" />
         </div>
       )}
-      {/* Bottom scrim so text is always readable over photos */}
-      {form.coverImageUrl && (
-        <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/60 to-transparent" />
+      {/* Bottom scrim so text is always readable over photos. Reduce scrim when showing posters so image isn't heavily obscured. */}
+      {form.coverImageUrl && showOverlay && (
+        <div className={`absolute inset-x-0 bottom-0 ${poster ? "h-1/3" : "h-2/3"} bg-gradient-to-t from-black/60 to-transparent`} />
       )}
-      <div className="absolute inset-x-0 bottom-0 flex items-end justify-between p-4 text-white">
-        <div>
-          <p className="text-[10px] font-semibold uppercase tracking-[0.26em] text-white/72">
-            Vivekanand Seva Mandal
-          </p>
-          <p className="mt-1 font-serif text-lg leading-tight">{form.title}</p>
+
+      {/* Optional overlay with title/team — hide when showOverlay is false (e.g., poster thumbnails) */}
+      {showOverlay && (
+        <div className="absolute inset-x-0 bottom-0 flex items-end justify-between p-4 text-white">
+          <div>
+            <p className="text-[10px] font-semibold uppercase tracking-[0.26em] text-white/72">
+              Vivekanand Seva Mandal
+            </p>
+            <p className="mt-1 font-serif text-lg leading-tight">{form.title}</p>
+          </div>
+          <div className="rounded-full border border-white/18 bg-white/12 px-3 py-1 text-xs font-semibold">
+            {form.team
+              .split(" ")
+              .map((part) => part[0])
+              .join("")}
+          </div>
         </div>
-        <div className="rounded-full border border-white/18 bg-white/12 px-3 py-1 text-xs font-semibold">
-          {form.team
-            .split(" ")
-            .map((part) => part[0])
-            .join("")}
-        </div>
-      </div>
+      )}
     </div>
   );
 }

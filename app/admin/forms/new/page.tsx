@@ -7,7 +7,7 @@ import Link from "next/link";
 import { createForm } from "@/app/actions/form-actions";
 import type { Team } from "@/lib/supabase";
 
-const TEAMS: Team[] = ["Yuva Chetana", "Gram Vikas", "Nalanda", "MUSE", "SDA"];
+const TEAMS: Team[] = ["Yuva Chetana", "Gram Vikas", "Nalanda", "MUSE", "SDA", "ECC", "Others"];
 
 const TEAM_GRADIENTS: Record<Team, string> = {
   "Yuva Chetana": "linear-gradient(135deg, #E8640A 0%, #C2500A 50%, #7C2D0A 100%)",
@@ -15,6 +15,8 @@ const TEAM_GRADIENTS: Record<Team, string> = {
   Nalanda: "linear-gradient(135deg, #1E4FC2 0%, #1E3A8A 50%, #172554 100%)",
   MUSE: "linear-gradient(135deg, #D43E8D 0%, #A8266A 50%, #7C1A4E 100%)",
   SDA: "linear-gradient(135deg, #7C3AED 0%, #5B21B6 50%, #3B0764 100%)",
+  ECC: "linear-gradient(135deg, #14B8A6 0%, #0F766E 50%, #134E4A 100%)",
+  Others: "linear-gradient(135deg, #9CA3AF 0%, #6B7280 50%, #4B5563 100%)",
 };
 
 export default function NewFormPage() {
@@ -56,23 +58,23 @@ export default function NewFormPage() {
     <main className="flex min-h-screen items-center justify-center p-4 sm:p-6 lg:p-8">
       <div className="w-full max-w-md">
         <div className="mb-6 text-center">
-          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-[color:rgba(232,100,10,0.08)]">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-7 w-7 text-[color:var(--color-saffron)]" aria-hidden>
+          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full border-2 border-black bg-[color:rgba(232,100,10,0.1)] shadow-[2px_2px_0_0_#000]">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-6 w-6 text-[color:var(--color-saffron)]" aria-hidden>
               <path d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m6.75 12H9m1.5-12H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9z" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </div>
           <h1 className="font-serif text-2xl text-[color:var(--color-dark)]">Create a new form</h1>
-          <p className="mt-1 text-sm text-[color:var(--color-muted)]">
+          <p className="mt-1 text-sm text-muted-foreground font-medium">
             You can change everything in the builder — this just gets you started.
           </p>
         </div>
 
         <form
           onSubmit={handleSubmit}
-          className="rounded-[24px] border border-[color:var(--color-border)] bg-[color:var(--color-card)] p-6 shadow-warm space-y-5"
+          className="rounded-xl border-2 border-black bg-[color:var(--color-card)] p-6 shadow-[4px_4px_0_0_#000] space-y-5"
         >
           <div className="space-y-1.5">
-            <label htmlFor="form-title" className="text-xs font-semibold uppercase tracking-[0.13em] text-[color:var(--color-muted)]">
+            <label htmlFor="form-title" className="text-xs font-bold uppercase tracking-[0.13em] text-muted-foreground">
               Form title *
             </label>
             <input
@@ -86,7 +88,7 @@ export default function NewFormPage() {
           </div>
 
           <div className="space-y-1.5">
-            <label htmlFor="form-team" className="text-xs font-semibold uppercase tracking-[0.13em] text-[color:var(--color-muted)]">
+            <label htmlFor="form-team" className="text-xs font-bold uppercase tracking-[0.13em] text-muted-foreground">
               Team
             </label>
             <select
@@ -101,33 +103,33 @@ export default function NewFormPage() {
 
           {/* Gradient preview */}
           <div
-            className="flex h-14 items-center justify-center rounded-[14px] font-serif text-base text-white/90 shadow-warm"
+            className="flex h-14 items-center justify-center rounded-lg border-2 border-black font-serif text-base font-bold text-white shadow-[2px_2px_0_0_#000]"
             style={{ background: TEAM_GRADIENTS[team] }}
           >
             {title || "Form title preview"}
           </div>
 
           {error && (
-            <p className="rounded-[10px] bg-red-50 px-4 py-2.5 text-sm text-red-600">{error}</p>
+            <p className="rounded-lg border-2 border-red-600 bg-red-50 px-4 py-2.5 text-sm font-semibold text-red-700 shadow-[2px_2px_0_0_#000]">{error}</p>
           )}
 
           <div className="flex gap-3 pt-1">
             <Link
               href="/admin/forms"
-              className="flex-1 rounded-[12px] border border-[color:var(--color-border)] py-3 text-center text-sm font-semibold text-[color:var(--color-muted)] transition-colors hover:text-[color:var(--color-dark)]"
+              className="flex-1 rounded-lg border-2 border-black bg-[color:var(--color-card)] py-2.5 text-center text-sm font-bold text-[color:var(--color-dark)] shadow-[2px_2px_0_0_#000] transition-all hover:-translate-y-px hover:shadow-[3px_3px_0_0_#000] active:translate-y-px active:shadow-none"
             >
               Cancel
             </Link>
             <button
               type="submit"
               disabled={isPending}
-              className="flex-1 inline-flex items-center justify-center gap-2 rounded-[12px] bg-[color:var(--color-saffron)] py-3 text-sm font-semibold text-white shadow-warm transition-all hover:-translate-y-px hover:bg-[color:var(--color-saffron-dark)] disabled:opacity-60"
+              className="flex-1 inline-flex items-center justify-center gap-2 rounded-lg border-2 border-black bg-[color:var(--color-saffron)] py-2.5 text-sm font-bold text-white shadow-[2px_2px_0_0_#000] transition-all hover:-translate-y-px hover:shadow-[3px_3px_0_0_#000] active:translate-y-px active:shadow-none disabled:opacity-60"
             >
               {isPending ? (
                 <>
                   <svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none" aria-hidden>
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="white" strokeWidth="3" />
-                    <path className="opacity-80" fill="white" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" />
+                    <path className="opacity-80" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
                   </svg>
                   Creating…
                 </>

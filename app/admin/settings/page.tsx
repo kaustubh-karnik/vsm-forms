@@ -53,7 +53,7 @@ export default function SettingsPage() {
             </label>
           </div>
           <div className="mt-4 flex justify-end">
-            <button className="rounded-[12px] bg-[color:var(--color-saffron)] px-5 py-2.5 text-sm font-semibold text-white transition-all hover:-translate-y-[1px] hover:bg-[color:var(--color-saffron-dark)]">
+            <button className="rounded-[10px] border-2 border-black bg-[color:var(--color-saffron)] px-5 py-2.5 text-sm font-bold text-white shadow-[3px_3px_0_0_#000] transition-all hover:-translate-y-px hover:shadow-[4px_4px_0_0_#000] active:translate-y-0 active:shadow-none">
               Save changes
             </button>
           </div>
@@ -84,7 +84,7 @@ export default function SettingsPage() {
             ].map((item) => (
               <div
                 key={item.key}
-                className="flex cursor-pointer items-center justify-between gap-4 rounded-[16px] border border-[color:var(--color-border)] bg-white px-4 py-3.5"
+                className="flex cursor-pointer items-center justify-between gap-4 rounded-[12px] border-2 border-black bg-[color:var(--color-card)] px-4 py-3.5 shadow-[2px_2px_0_0_#000] transition-all hover:-translate-y-px hover:shadow-[3px_3px_0_0_#000]"
               >
                 <div>
                   <p className="text-sm font-medium text-[color:var(--color-dark)]">{item.label}</p>

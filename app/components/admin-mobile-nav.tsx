@@ -11,11 +11,11 @@ export function AdminMobileNav() {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="flex items-center gap-3 border-b border-[color:var(--color-border)] bg-[color:rgba(255,250,243,0.95)] px-4 py-3 lg:hidden">
+    <div className="flex items-center gap-3 border-b-2 border-black bg-[color:var(--color-card)]/90 backdrop-blur-md px-4 py-3 lg:hidden">
       <Drawer direction="left" open={open} onOpenChange={setOpen}>
         <Drawer.Trigger asChild>
           <button
-            className="rounded-[10px] border border-[color:var(--color-border)] p-2 text-[color:var(--color-muted)] transition-colors hover:border-[color:rgba(232,100,10,0.3)] hover:text-[color:var(--color-saffron)]"
+            className="rounded-[10px] border-2 border-black p-2 text-[color:var(--color-dark)] bg-[color:var(--color-card)] shadow-[2px_2px_0_0_#000] hover:-translate-y-px hover:shadow-[3px_3px_0_0_#000] active:translate-y-0 active:shadow-[1px_1px_0_0_#000] transition-all"
             aria-label="Open navigation"
           >
             <svg viewBox="0 0 20 20" fill="currentColor" className="h-5 w-5" aria-hidden>
@@ -24,19 +24,19 @@ export function AdminMobileNav() {
           </button>
         </Drawer.Trigger>
 
-        <Drawer.Content className="bg-[color:var(--color-card)]">
+        <Drawer.Content className="bg-[color:var(--color-card)] border-r-2 border-black">
           <div className="flex h-full flex-col p-5">
             <div className="flex items-center justify-between">
               <Link href="/" className="flex items-center gap-3" onClick={() => setOpen(false)}>
                 <VsmLogo size={40} tone="warm" />
                 <div>
                   <p className="font-serif text-base leading-tight text-[color:var(--color-saffron)]">VSM Admin</p>
-                  <p className="text-[11px] text-[color:var(--color-muted)]">Vivekanand Seva Mandal</p>
+                  <p className="text-[11px] font-semibold text-muted-foreground">Vivekanand Seva Mandal</p>
                 </div>
               </Link>
               <Drawer.Close asChild>
                 <button
-                  className="rounded-[10px] border border-[color:var(--color-border)] p-2 text-[color:var(--color-muted)]"
+                  className="rounded-[10px] border-2 border-black p-2 text-[color:var(--color-dark)] bg-[color:var(--color-card)] shadow-[2px_2px_0_0_#000]"
                   aria-label="Close navigation"
                 >
                   <svg viewBox="0 0 20 20" fill="currentColor" className="h-4 w-4" aria-hidden>
@@ -51,10 +51,10 @@ export function AdminMobileNav() {
             </div>
 
             <div className="mt-auto pt-6">
-              <div className="h-px bg-[color:var(--color-border)]" />
+              <div className="h-[2px] bg-black" />
               <Link
                 href="/"
-                className="mt-4 flex items-center gap-2 text-xs font-medium text-[color:var(--color-muted)] transition-colors hover:text-[color:var(--color-saffron)]"
+                className="mt-4 flex items-center gap-2 text-xs font-bold text-muted-foreground transition-colors hover:text-[color:var(--color-saffron)]"
                 onClick={() => setOpen(false)}
               >
                 <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" className="h-3.5 w-3.5" aria-hidden>

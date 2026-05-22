@@ -89,7 +89,7 @@ export function ResponseViewer({
 
   if (responses.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center gap-4 rounded-[20px] border border-dashed border-[color:var(--color-border)] bg-white py-16 text-center">
+      <div className="flex flex-col items-center justify-center gap-4 rounded-[16px] border-2 border-dashed border-black bg-[color:var(--color-card)] py-16 text-center shadow-[3px_3px_0_0_#000]">
         <div className="flex h-14 w-14 items-center justify-center rounded-full bg-[color:rgba(232,100,10,0.07)]">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-7 w-7 text-[color:var(--color-saffron)]" aria-hidden>
             <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2" strokeLinecap="round" strokeLinejoin="round" />
@@ -107,7 +107,7 @@ export function ResponseViewer({
   return (
     <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_360px]">
       <section className="space-y-4">
-        <div className="flex flex-wrap items-center justify-between gap-3 rounded-[18px] border border-[color:var(--color-border)] bg-white px-4 py-3">
+        <div className="flex flex-wrap items-center justify-between gap-3 rounded-[12px] border-2 border-black bg-[color:var(--color-card)] px-4 py-3 shadow-[3px_3px_0_0_#000]">
           <div className="text-sm text-[color:var(--color-muted)]">
             {selectedCount > 0 ? (
               <span>
@@ -128,15 +128,15 @@ export function ResponseViewer({
                 if (selectedCount === 0) return;
                 setShowDeleteDialog(true);
               }}
-              className="rounded-[10px] border border-[color:rgba(220,38,38,0.2)] px-3 py-2 text-xs font-semibold text-[#B91C1C] transition-colors hover:border-[color:rgba(220,38,38,0.4)] hover:bg-[color:rgba(220,38,38,0.06)] disabled:cursor-not-allowed disabled:opacity-60"
+              className="rounded-[8px] border-2 border-black bg-red-100 px-3 py-2 text-xs font-bold text-[#B91C1C] shadow-[2px_2px_0_0_#000] transition-all hover:-translate-y-px hover:shadow-[3px_3px_0_0_#000] active:translate-y-0 active:shadow-none disabled:cursor-not-allowed disabled:opacity-60"
             >
               Delete
             </button>
           </div>
         </div>
 
-        <div className="rounded-[20px] border border-[color:var(--color-border)] bg-white shadow-[0_12px_32px_rgba(15,23,42,0.06)]">
-          <div className="border-b border-[color:var(--color-border)] px-4 py-3 text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--color-muted)] md:hidden">
+        <div className="rounded-[16px] border-2 border-black bg-[color:var(--color-card)] shadow-[4px_4px_0_0_#000] overflow-hidden">
+          <div className="border-b-2 border-black px-4 py-3 text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--color-muted)] md:hidden">
             Responses
           </div>
           <div className="space-y-3 p-4 md:hidden">
@@ -147,11 +147,11 @@ export function ResponseViewer({
                   key={response.id}
                   type="button"
                   onClick={() => selectRow(response.id)}
-                  className={`w-full rounded-[16px] border px-4 py-3 text-left transition-colors ${
-                    isSelected
-                      ? "border-[color:rgba(232,100,10,0.35)] bg-[color:rgba(232,100,10,0.08)]"
-                      : "border-[color:var(--color-border)] bg-white hover:bg-[color:rgba(253,246,236,0.6)]"
-                  }`}
+                  className={`w-full rounded-[12px] border-2 px-4 py-3 text-left transition-all ${
+                     isSelected
+                       ? "border-black bg-[color:var(--color-accent)] shadow-[2px_2px_0_0_#000]"
+                       : "border-black bg-[color:var(--color-card)] hover:bg-[color:var(--color-cream)]/50 shadow-[2px_2px_0_0_#000] hover:-translate-y-px hover:shadow-[3px_3px_0_0_#000] active:translate-y-0 active:shadow-none"
+                   }`}
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div>
@@ -174,7 +174,7 @@ export function ResponseViewer({
                         );
                       }}
                       onClick={(event) => event.stopPropagation()}
-                      className="mt-1 h-4 w-4 rounded border-[color:var(--color-border)] text-[color:var(--color-saffron)]"
+                      className="mt-1 h-4.5 w-4.5 accent-[color:var(--color-saffron)] rounded-none border-2 border-black shadow-[1px_1px_0_0_#000] cursor-pointer"
                     />
                   </div>
                   <div className="mt-3 grid gap-1 text-xs text-[color:var(--color-muted)]">
@@ -198,7 +198,7 @@ export function ResponseViewer({
             <div className="overflow-x-auto">
               <table className="min-w-[720px] border-collapse">
                 <thead>
-                  <tr className="bg-[color:rgba(253,246,236,0.92)] text-left">
+                  <tr className="bg-[color:var(--color-cream)] border-b-2 border-black text-left">
                     <th className="px-4 py-3 text-[10px] font-semibold uppercase tracking-[0.18em] text-[color:var(--color-muted)]">
                       <label className="inline-flex items-center gap-2">
                         <input
@@ -230,11 +230,11 @@ export function ResponseViewer({
                         key={response.id}
                         onClick={() => selectRow(response.id)}
                         aria-selected={isSelected}
-                        className={`cursor-pointer border-t border-[color:var(--color-border)] align-top transition-colors ${
-                          isSelected
-                            ? "bg-[color:rgba(232,100,10,0.05)]"
-                            : "hover:bg-[color:rgba(253,246,236,0.6)]"
-                        }`}
+                        className={`cursor-pointer border-t-2 border-black align-top transition-colors ${
+                           isSelected
+                             ? "bg-[color:var(--color-accent)]"
+                             : "hover:bg-[color:var(--color-cream)]/50"
+                         }`}
                       >
                         <td className="px-4 py-3">
                           <input
@@ -249,7 +249,7 @@ export function ResponseViewer({
                               );
                             }}
                             onClick={(event) => event.stopPropagation()}
-                            className="h-4 w-4 rounded border-[color:var(--color-border)] text-[color:var(--color-saffron)]"
+                            className="h-4.5 w-4.5 accent-[color:var(--color-saffron)] rounded-none border-2 border-black shadow-[1px_1px_0_0_#000] cursor-pointer"
                           />
                         </td>
                         <td className={`px-4 py-3 text-sm ${isSelected ? "font-semibold text-[color:var(--color-saffron)]" : "text-[color:var(--color-dark)]"}`}>
@@ -280,7 +280,7 @@ export function ResponseViewer({
       </section>
 
       {selected && (
-        <aside className="order-2 rounded-[24px] border border-[color:var(--color-border)] bg-white p-5 shadow-warm xl:sticky xl:top-6 xl:self-start">
+        <aside className="order-2 rounded-[20px] border-2 border-black bg-[color:var(--color-card)] p-5 shadow-[4px_4px_0_0_#000] xl:sticky xl:top-6 xl:self-start">
           <div className="mb-4 flex items-start justify-between gap-3">
             <div>
               <h2 className="font-serif text-xl text-[color:var(--color-dark)]">
@@ -300,7 +300,7 @@ export function ResponseViewer({
             {Object.entries(selected.data).map(([key, value]) => (
               <div
                 key={key}
-                className="rounded-[14px] border border-[color:var(--color-border)] bg-[color:var(--color-card)] p-3.5"
+                className="rounded-[10px] border-2 border-black bg-[color:var(--color-card)] p-3.5 shadow-[2px_2px_0_0_#000]"
               >
                 <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[color:var(--color-muted)]">
                   {key}
@@ -340,8 +340,8 @@ export function ResponseViewer({
             className="absolute inset-0 bg-[color:rgba(15,23,42,0.35)]"
             onClick={() => setShowDeleteDialog(false)}
           />
-          <div className="relative w-[92vw] max-w-[460px] overflow-hidden rounded-[24px] border border-[color:var(--color-border)] bg-white shadow-[0_28px_80px_rgba(15,23,42,0.3)]">
-            <div className="flex items-start gap-4 border-b border-[color:var(--color-border)] bg-[color:var(--color-card)] px-6 py-5">
+          <div className="relative w-[92vw] max-w-[460px] overflow-hidden rounded-[20px] border-2 border-black bg-[color:var(--color-card)] shadow-[6px_6px_0_0_#000]">
+            <div className="flex items-start gap-4 border-b-2 border-black bg-[color:var(--color-card)] px-6 py-5">
               <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[color:rgba(220,38,38,0.12)] text-[#B91C1C]">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-6 w-6" aria-hidden>
                   <path d="M12 9v4m0 4h.01" strokeLinecap="round" strokeLinejoin="round" />
@@ -366,7 +366,7 @@ export function ResponseViewer({
               <button
                 type="button"
                 onClick={() => setShowDeleteDialog(false)}
-                className="inline-flex items-center justify-center rounded-[12px] border border-[color:var(--color-border)] px-4 py-2.5 text-sm font-semibold text-[color:var(--color-muted)] transition-colors hover:border-[color:rgba(232,100,10,0.22)] hover:text-[color:var(--color-saffron)]"
+                className="inline-flex items-center justify-center rounded-[10px] border-2 border-black bg-[color:var(--color-cream)] px-4 py-2.5 text-sm font-bold text-[color:var(--color-dark)] shadow-[2px_2px_0_0_#000] transition-all hover:-translate-y-px hover:shadow-[3px_3px_0_0_#000] active:translate-y-0 active:shadow-none hover:text-[color:var(--color-saffron)]"
               >
                 Cancel
               </button>
@@ -375,13 +375,13 @@ export function ResponseViewer({
                 disabled={isPending}
                 onClick={() => {
                   startTransition(async () => {
-                    await deleteResponses(form.id, selectedIds);
-                    setSelectedIds([]);
-                    setShowDeleteDialog(false);
-                    router.refresh();
+                     await deleteResponses(form.id, selectedIds);
+                     setSelectedIds([]);
+                     setShowDeleteDialog(false);
+                     router.refresh();
                   });
                 }}
-                className="inline-flex items-center justify-center rounded-[12px] bg-[#DC2626] px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#B91C1C] disabled:cursor-not-allowed disabled:opacity-70"
+                className="inline-flex items-center justify-center rounded-[10px] border-2 border-black bg-[#DC2626] px-4 py-2.5 text-sm font-bold text-white shadow-[2px_2px_0_0_#000] transition-all hover:-translate-y-px hover:shadow-[3px_3px_0_0_#000] active:translate-y-0 active:shadow-none hover:bg-[#B91C1C] disabled:cursor-not-allowed disabled:opacity-70"
               >
                 Delete
               </button>

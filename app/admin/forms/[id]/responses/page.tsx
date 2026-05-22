@@ -32,7 +32,7 @@ export default async function ResponsesPage({
           <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             <div className="flex flex-wrap items-center gap-3">
               <TeamBadge team={form.team} />
-              <span className="rounded-full border border-[color:var(--color-border)] bg-white px-3 py-1 text-xs font-semibold text-[color:var(--color-muted)]">
+              <span className="rounded-full border border-[color:var(--color-border)] bg-[color:var(--color-card)] px-3 py-1 text-xs font-semibold text-[color:var(--color-muted)]">
                 {responses.length} {responses.length === 1 ? "response" : "responses"}
               </span>
             </div>

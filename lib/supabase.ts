@@ -10,7 +10,7 @@ if (!supabaseUrl || !supabaseAnonKey) {
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
-export type Team = "Yuva Chetana" | "Gram Vikas" | "Nalanda" | "MUSE" | "SDA";
+export type Team = "Yuva Chetana" | "Gram Vikas" | "Nalanda" | "MUSE" | "SDA" | "ECC" | "Others";
 export type FormStatus = "active" | "draft" | "closed";
 export type FieldType =
   | "text"
@@ -79,6 +79,8 @@ export const TEAM_COLORS: Record<Team, { bg: string; text: string; border: strin
   "Nalanda":      { bg: "#DBEAFE", text: "#1E3A8A", border: "#BFDBFE" },
   "MUSE":         { bg: "#FCE7F3", text: "#831843", border: "#FBCFE8" },
   "SDA":          { bg: "#EDE9FE", text: "#4C1D95", border: "#DDD6FE" },
+  "ECC":          { bg: "#CCFBF1", text: "#115E59", border: "#99F6E4" },
+  "Others":       { bg: "#F3F4F6", text: "#374151", border: "#E5E7EB" },
 };
 
 export const TEAM_DOTS: Record<Team, string> = {
@@ -87,6 +89,8 @@ export const TEAM_DOTS: Record<Team, string> = {
   "Nalanda":      "#1E4FC2",
   "MUSE":         "#D43E8D",
   "SDA":          "#7C3AED",
+  "ECC":          "#0F766E",
+  "Others":       "#6B7280",
 };
 
 export interface FormResponse {
@@ -218,7 +222,7 @@ function calculateTeamDistribution(forms: VSMForm[]) {
 }
 
 function calculateTeamTable(forms: VSMForm[], responses: FormResponse[]) {
-  const teams: Team[] = ['Yuva Chetana', 'Gram Vikas', 'Nalanda', 'MUSE', 'SDA'];
+  const teams: Team[] = ['Yuva Chetana', 'Gram Vikas', 'Nalanda', 'MUSE', 'SDA', 'ECC', 'Others'];
 
   return teams.map((team) => {
     const teamForms = forms.filter((f) => f.team === team);

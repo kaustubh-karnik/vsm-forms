@@ -36,7 +36,7 @@ export function ResponsesPanel({
 
   return (
     <div className="space-y-6">
-      <div className="grid gap-4 rounded-[18px] border border-[color:var(--color-border)] bg-[color:var(--color-card)] p-4 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
+      <div className="grid gap-4 rounded-[16px] border-2 border-black bg-[color:var(--color-card)] p-4 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end shadow-[4px_4px_0_0_#000]">
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-[minmax(0,1fr)_auto]">
           <label className="space-y-1 text-sm">
             <span className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[color:var(--color-muted)]">
@@ -52,10 +52,10 @@ export function ResponsesPanel({
           </label>
         </div>
         <div className="flex flex-wrap items-center justify-start gap-3 lg:justify-end">
-          <button className="rounded-[12px] border border-[color:var(--color-border)] bg-white px-4 py-2 text-sm font-semibold text-[color:var(--color-muted)] transition-colors hover:border-[color:rgba(232,100,10,0.22)] hover:text-[color:var(--color-saffron)]">
+          <button className="rounded-[10px] border-2 border-black bg-[color:var(--color-cream)] px-4 py-2 text-sm font-bold text-[color:var(--color-dark)] shadow-[2px_2px_0_0_#000] transition-all hover:-translate-y-px hover:shadow-[3px_3px_0_0_#000] active:translate-y-0 active:shadow-none hover:text-[color:var(--color-saffron)]">
             Export Excel
           </button>
-          <button className="rounded-[12px] border border-[color:var(--color-border)] bg-white px-4 py-2 text-sm font-semibold text-[color:var(--color-muted)] transition-colors hover:border-[color:rgba(232,100,10,0.22)] hover:text-[color:var(--color-saffron)]">
+          <button className="rounded-[10px] border-2 border-black bg-[color:var(--color-cream)] px-4 py-2 text-sm font-bold text-[color:var(--color-dark)] shadow-[2px_2px_0_0_#000] transition-all hover:-translate-y-px hover:shadow-[3px_3px_0_0_#000] active:translate-y-0 active:shadow-none hover:text-[color:var(--color-saffron)]">
             Export PDF
           </button>
         </div>

@@ -38,7 +38,7 @@ export default async function AdminFormsPage() {
             <h2 className="font-serif text-2xl text-[color:var(--color-dark)]">Active Forms</h2>
             <Link
               href="/admin/forms/new"
-              className="inline-flex items-center justify-center gap-2 rounded-[12px] bg-[color:var(--color-saffron)] px-4 py-3 text-sm font-semibold text-white shadow-warm transition-all hover:-translate-y-[1px] hover:bg-[color:var(--color-saffron-dark)]"
+              className="inline-flex items-center justify-center gap-2 rounded-lg border-2 border-black bg-[color:var(--color-saffron)] px-4 py-2.5 text-sm font-bold text-white shadow-[3px_3px_0_0_#000] transition-all hover:-translate-y-px hover:shadow-[4px_4px_0_0_#000] active:translate-y-px active:shadow-none"
             >
               <svg viewBox="0 0 20 20" fill="currentColor" className="h-4 w-4" aria-hidden>
                 <path fillRule="evenodd" d="M10 3a1 1 0 0 1 1 1v5h5a1 1 0 1 1 0 2h-5v5a1 1 0 1 1-2 0v-5H4a1 1 0 1 1 0-2h5V4a1 1 0 0 1 1-1z" clipRule="evenodd" />

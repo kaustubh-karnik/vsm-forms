@@ -339,7 +339,7 @@ export function FormCover({
 
 export function PublicField({ field }: { field: FormField }) {
   const label = (
-    <label className="mb-2 block text-sm font-medium text-[color:var(--color-muted)]">
+    <label className="mb-2 block text-sm font-bold text-dark">
       {field.label}
       {field.required ? (
         <span className="text-[color:var(--color-saffron)]"> *</span>
@@ -396,7 +396,7 @@ export function PublicField({ field }: { field: FormField }) {
 
   if (field.type === "checkbox") {
     return (
-      <label className="flex items-start gap-3 rounded-[16px] border border-[color:var(--color-border)] bg-white px-4 py-3 text-sm text-[color:var(--color-dark)]">
+      <label className="flex items-start gap-3 rounded-[16px] border border-[color:var(--color-border)] bg-[color:var(--color-card)] px-4 py-3 text-sm text-[color:var(--color-dark)]">
         <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded border border-[color:var(--color-border)]" />
         <span>
           {field.label}
@@ -412,7 +412,7 @@ export function PublicField({ field }: { field: FormField }) {
     return (
       <div>
         {label}
-        <div className="rounded-[12px] border border-dashed border-[color:var(--color-border)] bg-white px-4 py-5 text-sm text-[color:var(--color-muted)]">
+        <div className="rounded-[12px] border border-dashed border-[color:var(--color-border)] bg-[color:var(--color-card)] px-4 py-5 text-sm text-[color:var(--color-muted)]">
           Upload a file
         </div>
       </div>
@@ -453,9 +453,11 @@ export function DashboardHeader({
 }) {
   return (
     <header className="fade-up fade-up-1">
-      <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[color:var(--color-muted)]">
-        {eyebrow}
-      </p>
+      {eyebrow && (
+        <p className="text-xs font-bold uppercase tracking-[0.16em] text-muted-foreground">
+          {eyebrow}
+        </p>
+      )}
       <Text
         as="h1"
         className="mt-2 text-[clamp(2rem,4vw,3rem)] leading-tight text-[color:var(--color-dark)]"
@@ -464,7 +466,7 @@ export function DashboardHeader({
       </Text>
       <Text
         as="p"
-        className="mt-3 max-w-3xl text-sm leading-7 text-[color:var(--color-muted)]"
+        className="mt-3 max-w-3xl text-sm font-semibold leading-relaxed text-muted-foreground"
       >
         {description}
       </Text>
@@ -481,7 +483,7 @@ export function AdminCard({
 }) {
   return (
     <Card
-      className={`fade-up fade-up-2 block w-full rounded-[24px] border-2 border-[color:var(--color-border)] bg-[color:var(--color-card)] p-5 shadow-[4px_4px_0_0_var(--border)] transition-all sm:p-6 ${className}`}
+      className={`fade-up fade-up-2 block w-full rounded-[20px] border-2 border-black bg-[color:var(--color-card)] p-5 shadow-[4px_4px_0_0_#000] transition-all sm:p-6 ${className}`}
     >
       {children}
     </Card>
@@ -496,11 +498,11 @@ export function StatsCard({
   value: number;
 }) {
   return (
-    <Card className="fade-up fade-up-2 block rounded-[22px] border-2 border-[color:var(--color-border)] bg-white p-5 shadow-[4px_4px_0_0_var(--border)]">
-      <p className="text-4xl text-[color:var(--color-saffron)]">
+    <Card className="fade-up fade-up-2 block rounded-[18px] border-2 border-black bg-[color:var(--color-card)]/80 backdrop-blur-sm p-5 shadow-[4px_4px_0_0_#000]">
+      <p className="text-4xl font-bold text-[color:var(--color-saffron)]">
         {value}
       </p>
-      <p className="mt-2 text-sm text-[color:var(--color-muted)]">{label}</p>
+      <p className="mt-2 text-sm font-bold text-muted-foreground">{label}</p>
     </Card>
   );
 }
@@ -509,11 +511,11 @@ export function FormListRow({ form }: { form: VSMForm }) {
   const deadline = getDeadlineState(form.closingDate);
 
   return (
-    <article className="rounded-[20px] border border-[color:var(--color-border)] bg-white p-4 shadow-warm">
+    <article className="rounded-[16px] border-2 border-black bg-[color:var(--color-card)] p-4 shadow-[3px_3px_0_0_#000] hover:shadow-[4px_4px_0_0_#000] hover:-translate-y-[1px] transition-all duration-150">
       <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         <div className="space-y-2">
           <div className="flex flex-wrap items-center gap-3">
-            <h3 className="font-serif text-xl text-[color:var(--color-dark)]">
+            <h3 className="font-serif text-xl font-bold text-[color:var(--color-dark)]">
               {form.title}
             </h3>
             <Badge
@@ -523,14 +525,14 @@ export function FormListRow({ form }: { form: VSMForm }) {
                   ? "bg-[rgba(21,128,61,0.1)] text-[#166534] outline outline-1 outline-[rgba(21,128,61,0.25)]"
                   : form.status === "draft"
                     ? "bg-[rgba(232,100,10,0.08)] text-[color:var(--color-saffron)] outline outline-1 outline-[rgba(232,100,10,0.2)]"
-                    : "bg-[rgba(107,91,69,0.08)] text-[color:var(--color-muted)] outline outline-1 outline-[rgba(107,91,69,0.2)]"
+                    : "bg-[#F3E8D9]/60 text-muted-foreground outline outline-1 outline-black/20"
               }
             >
               {getStatusLabel(form.status)}
             </Badge>
             <TeamBadge team={form.team} />
           </div>
-          <p className="text-sm text-[color:var(--color-muted)]">
+          <p className="text-sm font-semibold text-muted-foreground">
             {form.responseCount} responses
             {deadline ? ` · ${deadline.label}` : ""}
           </p>
@@ -539,13 +541,13 @@ export function FormListRow({ form }: { form: VSMForm }) {
         <div className="flex flex-wrap gap-3">
           <Link
             href={`/admin/forms/${form.id}`}
-            className="rounded-[12px] border border-[color:var(--color-border)] px-4 py-2.5 text-sm font-semibold text-[color:var(--color-muted)]"
+            className="rounded-[10px] border-2 border-black bg-[color:var(--color-cream)] px-4 py-2 text-sm font-bold text-[color:var(--color-dark)] shadow-[2px_2px_0_0_#000] hover:-translate-y-px hover:shadow-[3px_3px_0_0_#000] active:translate-y-0 active:shadow-none transition-all duration-150"
           >
             Edit
           </Link>
           <Link
             href={`/admin/forms/${form.id}/responses`}
-            className="rounded-[12px] border border-[color:var(--color-border)] px-4 py-2.5 text-sm font-semibold text-[color:var(--color-muted)]"
+            className="rounded-[10px] border-2 border-black bg-[color:var(--color-cream)] px-4 py-2 text-sm font-bold text-dark shadow-[2px_2px_0_0_#000] hover:-translate-y-px hover:shadow-[3px_3px_0_0_#000] active:translate-y-0 active:shadow-none transition-all duration-150"
           >
             Data
           </Link>
@@ -580,7 +582,7 @@ export function FieldPalette() {
         {palette.map((item) => (
           <div
             key={item}
-            className="rounded-full border border-[color:var(--color-border)] bg-white px-4 py-2.5 text-sm font-semibold text-[color:var(--color-dark)] shadow-warm"
+            className="rounded-[10px] border-2 border-black bg-[color:var(--color-cream)] px-4 py-2.5 text-sm font-bold text-[color:var(--color-dark)] shadow-[2px_2px_0_0_#000]"
           >
             {item}
           </div>
@@ -605,7 +607,7 @@ export function FormCanvasPreview({ form }: { form: VSMForm }) {
         <TeamBadge team={form.team} />
       </div>
 
-      <div className="mt-5 overflow-hidden rounded-[24px] border border-[color:var(--color-border)] bg-white">
+      <div className="mt-5 overflow-hidden rounded-[20px] border-2 border-black bg-[color:var(--color-card)] shadow-[4px_4px_0_0_#000]">
         <FormCover form={form} tall />
         <div className="space-y-4 p-5 sm:p-6">
           {form.fields.map((field) => (
@@ -633,18 +635,18 @@ export function ResponseTable({
   const columns = form.fields.map((field) => field.label);
 
   return (
-    <div className="overflow-hidden rounded-[20px] border border-[color:var(--color-border)] bg-white">
+    <div className="overflow-hidden rounded-[16px] border-2 border-black bg-[color:var(--color-card)] shadow-[3px_3px_0_0_#000]">
       <div className="overflow-x-auto">
         <table className="min-w-full border-collapse">
           <thead>
-            <tr className="bg-[color:rgba(253,246,236,0.85)] text-left">
-              <th className="px-4 py-3 text-xs font-semibold uppercase tracking-[0.14em] text-[color:var(--color-muted)]">
+            <tr className="bg-[color:var(--color-cream)] border-b-2 border-black text-left">
+              <th className="px-4 py-3 text-xs font-bold uppercase tracking-[0.14em] text-dark">
                 Submitted
               </th>
               {columns.map((column) => (
                 <th
                   key={column}
-                  className="px-4 py-3 text-xs font-semibold uppercase tracking-[0.14em] text-[color:var(--color-muted)]"
+                  className="px-4 py-3 text-xs font-bold uppercase tracking-[0.14em] text-dark"
                 >
                   {column}
                 </th>
@@ -655,15 +657,15 @@ export function ResponseTable({
             {responses.map((response) => (
               <tr
                 key={response.id}
-                className="border-t border-[color:var(--color-border)] align-top"
+                className="border-t-2 border-black align-top hover:bg-[color:var(--color-cream)]/40 transition-colors"
               >
-                <td className="px-4 py-3 text-sm text-[color:var(--color-dark)]">
+                <td className="px-4 py-3 text-sm font-bold text-dark">
                   {formatLongDate(response.submittedAt)}
                 </td>
                 {columns.map((column) => (
                   <td
                     key={`${response.id}-${column}`}
-                    className="px-4 py-3 text-sm text-[color:var(--color-muted)]"
+                    className="px-4 py-3 text-sm font-medium text-dark/85"
                   >
                     {String(response.data[column] ?? "-")}
                   </td>
@@ -693,7 +695,7 @@ export function ResponseDetailCard({
   }
 
   return (
-    <aside className="fade-up fade-up-3 rounded-[24px] border border-[color:var(--color-border)] bg-white p-5 shadow-warm">
+    <aside className="fade-up fade-up-3 rounded-[20px] border-2 border-black bg-[color:var(--color-card)] p-5 shadow-[4px_4px_0_0_#000]">
       <h2 className="font-serif text-2xl text-[color:var(--color-dark)]">
         Submission detail
       </h2>
@@ -705,7 +707,7 @@ export function ResponseDetailCard({
         {Object.entries(response.data).map(([key, value]) => (
           <div
             key={key}
-            className="rounded-[16px] border border-[color:var(--color-border)] bg-[color:var(--color-card)] p-4"
+            className="rounded-[12px] border-2 border-black bg-[color:var(--color-card)] p-4 shadow-[2px_2px_0_0_#000]"
           >
             <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[color:var(--color-muted)]">
               {key}
@@ -734,7 +736,7 @@ export function BarChartCard({
         Monthly response volume across your current working set.
       </p>
 
-      <div className="mt-6 overflow-hidden rounded-[20px] border border-[color:var(--color-border)] bg-white p-5">
+      <div className="mt-6 overflow-hidden rounded-[16px] border-2 border-black bg-[color:var(--color-card)] p-5 shadow-[3px_3px_0_0_#000]">
         <BarChart
           data={data}
           index="month"
@@ -794,7 +796,7 @@ export function DonutChartCard({
           {data.map((item) => (
             <div
               key={item.team}
-              className="flex items-center justify-between rounded-[16px] border border-[color:var(--color-border)] bg-white px-4 py-3"
+              className="flex items-center justify-between rounded-[12px] border-2 border-black bg-[color:var(--color-cream)] px-4 py-3 shadow-[2px_2px_0_0_#000]"
             >
               <div className="flex items-center gap-3">
                 <span
@@ -827,20 +829,20 @@ export function TeamAnalyticsTable({
   }>;
 }) {
   return (
-    <div className="overflow-hidden rounded-[20px] border border-[color:var(--color-border)] bg-white">
+    <div className="overflow-hidden rounded-[16px] border-2 border-black bg-[color:var(--color-card)] shadow-[3px_3px_0_0_#000]">
       <table className="min-w-full border-collapse">
         <thead>
-          <tr className="bg-[color:rgba(253,246,236,0.85)] text-left">
-            <th className="px-4 py-3 text-xs font-semibold uppercase tracking-[0.14em] text-[color:var(--color-muted)]">
+          <tr className="bg-[color:var(--color-cream)] border-b-2 border-black text-left">
+            <th className="px-4 py-3 text-xs font-bold uppercase tracking-[0.14em] text-dark">
               Team
             </th>
-            <th className="px-4 py-3 text-xs font-semibold uppercase tracking-[0.14em] text-[color:var(--color-muted)]">
+            <th className="px-4 py-3 text-xs font-bold uppercase tracking-[0.14em] text-dark">
               Forms
             </th>
-            <th className="px-4 py-3 text-xs font-semibold uppercase tracking-[0.14em] text-[color:var(--color-muted)]">
+            <th className="px-4 py-3 text-xs font-bold uppercase tracking-[0.14em] text-dark">
               Responses
             </th>
-            <th className="px-4 py-3 text-xs font-semibold uppercase tracking-[0.14em] text-[color:var(--color-muted)]">
+            <th className="px-4 py-3 text-xs font-bold uppercase tracking-[0.14em] text-dark">
               Last activity
             </th>
           </tr>
@@ -849,18 +851,18 @@ export function TeamAnalyticsTable({
           {rows.map((row) => (
             <tr
               key={row.team}
-              className="border-t border-[color:var(--color-border)]"
+              className="border-t-2 border-black align-middle hover:bg-[color:var(--color-cream)]/40 transition-colors"
             >
               <td className="px-4 py-3">
                 <TeamBadge team={row.team} />
               </td>
-              <td className="px-4 py-3 text-sm text-[color:var(--color-dark)]">
+              <td className="px-4 py-3 text-sm font-bold text-dark">
                 {row.forms}
               </td>
-              <td className="px-4 py-3 text-sm text-[color:var(--color-dark)]">
+              <td className="px-4 py-3 text-sm font-bold text-dark">
                 {row.responses}
               </td>
-              <td className="px-4 py-3 text-sm text-[color:var(--color-muted)]">
+              <td className="px-4 py-3 text-sm font-semibold text-muted-foreground">
                 {formatShortDate(row.lastActivity)}
               </td>
             </tr>

@@ -16,7 +16,7 @@ import type {
 
 // ─── constants ───────────────────────────────────────────────────────────────
 
-const TEAMS: Team[] = ["Yuva Chetana", "Gram Vikas", "Nalanda", "MUSE", "SDA"];
+const TEAMS: Team[] = ["Yuva Chetana", "Gram Vikas", "Nalanda", "MUSE", "SDA", "ECC", "Others"];
 
 const TEAM_GRADIENTS: Record<Team, string> = {
   "Yuva Chetana": "linear-gradient(135deg, #E8640A 0%, #C2500A 50%, #7C2D0A 100%)",
@@ -24,6 +24,8 @@ const TEAM_GRADIENTS: Record<Team, string> = {
   Nalanda: "linear-gradient(135deg, #1E4FC2 0%, #1E3A8A 50%, #172554 100%)",
   MUSE: "linear-gradient(135deg, #D43E8D 0%, #A8266A 50%, #7C1A4E 100%)",
   SDA: "linear-gradient(135deg, #7C3AED 0%, #5B21B6 50%, #3B0764 100%)",
+  ECC: "linear-gradient(135deg, #14B8A6 0%, #0F766E 50%, #134E4A 100%)",
+  Others: "linear-gradient(135deg, #9CA3AF 0%, #6B7280 50%, #4B5563 100%)",
 };
 
 const FIELD_TYPES: Array<{ type: FieldType; label: string; hint: string; icon: React.ReactNode }> = [
@@ -168,7 +170,7 @@ function OptionsEditor({ options, onChange }: { options: string[]; onChange: (ne
 
   return (
     <div className="space-y-2">
-      <p className="text-xs font-semibold uppercase tracking-[0.13em] text-[color:var(--color-muted)]">Options</p>
+      <p className="text-xs font-bold uppercase tracking-[0.13em] text-[color:var(--color-dark)]">Options</p>
       <div className="space-y-2">
         {options.map((opt, i) => (
           <div key={i} className="flex items-center gap-2">
@@ -177,9 +179,9 @@ function OptionsEditor({ options, onChange }: { options: string[]; onChange: (ne
             </span>
             <input value={opt} onChange={(e) => update(i, e.target.value)} className="vsm-input py-2 text-sm" placeholder={`Option ${i + 1}`} />
             <button type="button" onClick={() => remove(i)} disabled={options.length <= 1}
-              className="shrink-0 rounded-full p-1 text-[color:var(--color-muted)] transition-colors hover:bg-red-50 hover:text-red-500 disabled:cursor-not-allowed disabled:opacity-30"
+              className="shrink-0 rounded-lg border-2 border-black p-1 bg-[color:var(--color-cream)] text-[color:var(--color-dark)] shadow-[1px_1px_0_0_#000] transition-all hover:bg-red-50 hover:text-red-500 disabled:cursor-not-allowed disabled:opacity-30"
               aria-label="Remove option">
-              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" className="h-3.5 w-3.5" aria-hidden>
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2.5" className="h-3.5 w-3.5" aria-hidden>
                 <path d="M4 4l8 8M12 4l-8 8" strokeLinecap="round" />
               </svg>
             </button>
@@ -187,8 +189,8 @@ function OptionsEditor({ options, onChange }: { options: string[]; onChange: (ne
         ))}
       </div>
       <button type="button" onClick={add}
-        className="inline-flex items-center gap-1.5 rounded-[10px] border border-dashed border-[color:var(--color-border)] px-3 py-2 text-sm text-[color:var(--color-muted)] transition-colors hover:border-[color:var(--color-saffron)] hover:text-[color:var(--color-saffron)]">
-        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" className="h-3.5 w-3.5" aria-hidden>
+        className="inline-flex items-center gap-1.5 rounded-lg border-2 border-dashed border-black bg-[color:var(--color-card)] px-3 py-2 text-sm text-[color:var(--color-dark)] font-bold transition-all shadow-[2px_2px_0_0_#000] hover:shadow-[3px_3px_0_0_#E8640A] hover:border-[color:var(--color-saffron)] hover:text-[color:var(--color-saffron)] active:translate-x-[1px] active:translate-y-[1px] active:shadow-none">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2.5" className="h-3.5 w-3.5" aria-hidden>
           <path d="M8 3v10M3 8h10" strokeLinecap="round" />
         </svg>
         Add option
@@ -209,23 +211,23 @@ function ValidationEditor({ type, validation, onChange }: {
   const isNum = type === "number";
 
   return (
-    <div className="space-y-3 rounded-[12px] border border-[color:var(--color-border)] bg-[color:var(--color-cream)] p-4">
-      <p className="text-xs font-semibold uppercase tracking-[0.13em] text-[color:var(--color-muted)]">Validation</p>
+    <div className="space-y-3 rounded-xl border-2 border-black bg-[color:var(--color-cream)] p-4 shadow-[2px_2px_0_0_#000]">
+      <p className="text-xs font-bold uppercase tracking-[0.13em] text-[color:var(--color-dark)]">Validation</p>
       <div className="grid grid-cols-2 gap-3">
         {isText && (
           <>
             <div className="space-y-1">
-              <label className="text-xs text-[color:var(--color-muted)]">Min length</label>
+              <label className="text-xs font-bold text-[color:var(--color-dark)]">Min length</label>
               <input type="number" min={0} value={v.minLength ?? ""} onChange={(e) => onChange({ ...v, minLength: e.target.value ? Number(e.target.value) : undefined })}
                 className="vsm-input py-1.5 text-sm" placeholder="0" />
             </div>
             <div className="space-y-1">
-              <label className="text-xs text-[color:var(--color-muted)]">Max length</label>
+              <label className="text-xs font-bold text-[color:var(--color-dark)]">Max length</label>
               <input type="number" min={0} value={v.maxLength ?? ""} onChange={(e) => onChange({ ...v, maxLength: e.target.value ? Number(e.target.value) : undefined })}
                 className="vsm-input py-1.5 text-sm" placeholder="∞" />
             </div>
             <div className="col-span-2 space-y-1">
-              <label className="text-xs text-[color:var(--color-muted)]">Regex pattern</label>
+              <label className="text-xs font-bold text-[color:var(--color-dark)]">Regex pattern</label>
               <input type="text" value={v.pattern ?? ""} onChange={(e) => onChange({ ...v, pattern: e.target.value || undefined })}
                 className="vsm-input py-1.5 text-sm font-mono" placeholder="e.g. ^[A-Za-z ]+$" />
             </div>
@@ -234,12 +236,12 @@ function ValidationEditor({ type, validation, onChange }: {
         {isNum && (
           <>
             <div className="space-y-1">
-              <label className="text-xs text-[color:var(--color-muted)]">Min value</label>
+              <label className="text-xs font-bold text-[color:var(--color-dark)]">Min value</label>
               <input type="number" value={v.min ?? ""} onChange={(e) => onChange({ ...v, min: e.target.value ? Number(e.target.value) : undefined })}
                 className="vsm-input py-1.5 text-sm" placeholder="−∞" />
             </div>
             <div className="space-y-1">
-              <label className="text-xs text-[color:var(--color-muted)]">Max value</label>
+              <label className="text-xs font-bold text-[color:var(--color-dark)]">Max value</label>
               <input type="number" value={v.max ?? ""} onChange={(e) => onChange({ ...v, max: e.target.value ? Number(e.target.value) : undefined })}
                 className="vsm-input py-1.5 text-sm" placeholder="∞" />
             </div>
@@ -247,7 +249,7 @@ function ValidationEditor({ type, validation, onChange }: {
         )}
       </div>
       <div className="space-y-1">
-        <label className="text-xs text-[color:var(--color-muted)]">Custom error message</label>
+        <label className="text-xs font-bold text-[color:var(--color-dark)]">Custom error message</label>
         <input type="text" value={v.errorMessage ?? ""} onChange={(e) => onChange({ ...v, errorMessage: e.target.value || undefined })}
           className="vsm-input py-1.5 text-sm" placeholder="e.g. Please enter a valid name" />
       </div>
@@ -281,12 +283,12 @@ function FieldCard({
   return (
     <div
       draggable onDragStart={onDragStart} onDragOver={onDragOver} onDrop={onDrop} onDragEnd={onDragEnd}
-      className={`relative rounded-[18px] border transition-all duration-150 ${
+      className={`relative rounded-xl border-2 border-black transition-all duration-150 ${
         isDragging ? "opacity-40"
-        : isOver ? "border-[color:var(--color-saffron)] shadow-[0_0_0_2px_rgba(232,100,10,0.18)]"
-        : isActive ? "border-[color:var(--color-saffron)] shadow-[0_2px_16px_rgba(232,100,10,0.12)]"
-        : "border-[color:var(--color-border)] hover:border-[color:rgba(232,100,10,0.3)]"
-      } bg-white`}
+        : isOver ? "bg-[color:rgba(232,100,10,0.05)] translate-x-[2px] translate-y-[2px]"
+        : isActive ? "bg-[color:var(--color-card)] shadow-[4px_4px_0_0_#E8640A]"
+        : "bg-[color:var(--color-card)] shadow-[3px_3px_0_0_#1A1208] hover:shadow-[4px_4px_0_0_#1A1208] hover:-translate-x-[1px] hover:-translate-y-[1px]"
+      }`}
     >
       {isActive && <div className="absolute left-0 top-4 bottom-4 w-[3px] rounded-r-full bg-[color:var(--color-saffron)]" />}
 
@@ -304,11 +306,11 @@ function FieldCard({
         <div className="flex min-w-0 flex-1 items-center gap-3">
           <span className="shrink-0 text-[color:var(--color-muted)]">{fieldTypeIcon[field.type]}</span>
           <div className="min-w-0">
-            <p className="truncate text-sm font-medium text-[color:var(--color-dark)]">
-              {field.label || <span className="italic text-[color:var(--color-muted)]">Untitled question</span>}
+            <p className="truncate text-sm font-bold text-[color:var(--color-dark)]">
+              {field.label || <span className="italic text-[color:var(--color-muted)] font-medium">Untitled question</span>}
               {field.required && <span className="ml-1 text-[color:var(--color-saffron)]">*</span>}
             </p>
-            <p className="text-xs text-[color:var(--color-muted)]">{fieldTypeLabel[field.type]}</p>
+            <p className="text-xs font-semibold text-[color:var(--color-muted)]">{fieldTypeLabel[field.type]}</p>
           </div>
         </div>
         <div className="flex shrink-0 items-center" onClick={(e) => e.stopPropagation()}>
@@ -318,10 +320,10 @@ function FieldCard({
               e.stopPropagation();
               onDelete();
             }}
-            className="rounded-lg p-1.5 text-[color:var(--color-muted)] transition-colors hover:bg-red-50 hover:text-red-500"
+            className="rounded-lg border-2 border-black p-1.5 bg-[color:var(--color-cream)] text-[color:var(--color-dark)] shadow-[1px_1px_0_0_#000] hover:bg-red-50 hover:text-red-500 hover:shadow-[2px_2px_0_0_#000] hover:-translate-x-[0.5px] hover:-translate-y-[0.5px] active:translate-x-0 active:translate-y-0 active:shadow-none transition-all"
             aria-label="Delete field"
           >
-            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.8" className="h-3.5 w-3.5" aria-hidden>
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" className="h-3.5 w-3.5" aria-hidden>
               <path d="M3 4h10M6 4V3a1 1 0 011-1h2a1 1 0 011 1v1M5 4l.5 9h5l.5-9" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </button>
@@ -329,17 +331,17 @@ function FieldCard({
       </div>
 
       {isActive && (
-        <div className="border-t border-[color:var(--color-border)] px-5 pb-5 pt-4 space-y-4" onClick={(e) => e.stopPropagation()}>
+        <div className="border-t-2 border-black px-5 pb-5 pt-4 space-y-4" onClick={(e) => e.stopPropagation()}>
           {/* Question label */}
           <div className="space-y-1.5">
-            <label className="text-xs font-semibold uppercase tracking-[0.13em] text-[color:var(--color-muted)]">Question</label>
+            <label className="text-xs font-bold uppercase tracking-[0.13em] text-[color:var(--color-dark)]">Question</label>
             <input autoFocus value={field.label} onChange={(e) => onUpdate({ label: e.target.value })} className="vsm-input text-sm" placeholder="Enter your question…" />
           </div>
 
           {/* Help text */}
           <div className="space-y-1.5">
-            <label className="text-xs font-semibold uppercase tracking-[0.13em] text-[color:var(--color-muted)]">
-              Help text <span className="font-normal normal-case tracking-normal">(optional)</span>
+            <label className="text-xs font-bold uppercase tracking-[0.13em] text-[color:var(--color-dark)]">
+              Help text <span className="font-normal normal-case tracking-normal text-[color:var(--color-muted)]">(optional)</span>
             </label>
             <input value={field.helpText ?? ""} onChange={(e) => onUpdate({ helpText: e.target.value || undefined })}
               className="vsm-input text-sm" placeholder="Extra guidance shown below the question…" />
@@ -348,8 +350,8 @@ function FieldCard({
           {/* Placeholder */}
           {HAS_PLACEHOLDER.includes(field.type) && (
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold uppercase tracking-[0.13em] text-[color:var(--color-muted)]">
-                Placeholder <span className="font-normal normal-case tracking-normal">(optional)</span>
+              <label className="text-xs font-bold uppercase tracking-[0.13em] text-[color:var(--color-dark)]">
+                Placeholder <span className="font-normal normal-case tracking-normal text-[color:var(--color-muted)]">(optional)</span>
               </label>
               <input value={field.placeholder ?? ""} onChange={(e) => onUpdate({ placeholder: e.target.value })}
                 className="vsm-input text-sm" placeholder="e.g. Your full name" />
@@ -364,27 +366,27 @@ function FieldCard({
           {/* Linear scale config */}
           {field.type === "linear-scale" && (
             <div className="space-y-3">
-              <p className="text-xs font-semibold uppercase tracking-[0.13em] text-[color:var(--color-muted)]">Scale range</p>
+              <p className="text-xs font-bold uppercase tracking-[0.13em] text-[color:var(--color-dark)]">Scale range</p>
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1">
-                  <label className="text-xs text-[color:var(--color-muted)]">Min</label>
-                  <select value={field.scaleMin ?? 1} onChange={(e) => onUpdate({ scaleMin: Number(e.target.value) })} className="vsm-input py-2 text-sm">
+                  <label className="text-xs font-bold text-[color:var(--color-dark)]">Min</label>
+                  <select value={field.scaleMin ?? 1} onChange={(e) => onUpdate({ scaleMin: Number(e.target.value) })} className="vsm-input py-2 text-sm bg-[color:var(--color-cream)] border-2 border-black shadow-[2px_2px_0_0_#000] focus:shadow-none focus:translate-x-[1px] focus:translate-y-[1px] transition-all cursor-pointer">
                     {[0, 1].map((v) => <option key={v} value={v}>{v}</option>)}
                   </select>
                 </div>
                 <div className="space-y-1">
-                  <label className="text-xs text-[color:var(--color-muted)]">Max</label>
-                  <select value={field.scaleMax ?? 5} onChange={(e) => onUpdate({ scaleMax: Number(e.target.value) })} className="vsm-input py-2 text-sm">
+                  <label className="text-xs font-bold text-[color:var(--color-dark)]">Max</label>
+                  <select value={field.scaleMax ?? 5} onChange={(e) => onUpdate({ scaleMax: Number(e.target.value) })} className="vsm-input py-2 text-sm bg-[color:var(--color-cream)] border-2 border-black shadow-[2px_2px_0_0_#000] focus:shadow-none focus:translate-x-[1px] focus:translate-y-[1px] transition-all cursor-pointer">
                     {[2, 3, 4, 5, 6, 7, 8, 9, 10].map((v) => <option key={v} value={v}>{v}</option>)}
                   </select>
                 </div>
                 <div className="space-y-1">
-                  <label className="text-xs text-[color:var(--color-muted)]">Min label</label>
+                  <label className="text-xs font-bold text-[color:var(--color-dark)]">Min label</label>
                   <input value={field.scaleMinLabel ?? ""} onChange={(e) => onUpdate({ scaleMinLabel: e.target.value })}
                     className="vsm-input py-1.5 text-sm" placeholder="e.g. Not likely" />
                 </div>
                 <div className="space-y-1">
-                  <label className="text-xs text-[color:var(--color-muted)]">Max label</label>
+                  <label className="text-xs font-bold text-[color:var(--color-dark)]">Max label</label>
                   <input value={field.scaleMaxLabel ?? ""} onChange={(e) => onUpdate({ scaleMaxLabel: e.target.value })}
                     className="vsm-input py-1.5 text-sm" placeholder="e.g. Very likely" />
                 </div>
@@ -396,8 +398,8 @@ function FieldCard({
           {HAS_VALIDATION.includes(field.type) && (
             <div className="space-y-2">
               <button type="button" onClick={() => setShowValidation((p) => !p)}
-                className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.13em] text-[color:var(--color-muted)] transition-colors hover:text-[color:var(--color-saffron)]">
-                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" className={`h-3.5 w-3.5 transition-transform ${showValidation ? "rotate-90" : ""}`} aria-hidden>
+                className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.13em] text-[color:var(--color-dark)] transition-colors hover:text-[color:var(--color-saffron)]">
+                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2.5" className={`h-3.5 w-3.5 transition-transform ${showValidation ? "rotate-90" : ""}`} aria-hidden>
                   <path d="M6 4l4 4-4 4" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
                 Validation rules
@@ -410,14 +412,14 @@ function FieldCard({
           )}
 
           {/* Required toggle */}
-          <label className="flex cursor-pointer items-center gap-3 rounded-[12px] border border-[color:var(--color-border)] bg-[color:var(--color-cream)] px-4 py-3 text-sm">
+          <label className="flex cursor-pointer items-center gap-3 rounded-xl border-2 border-black bg-[color:var(--color-cream)] px-4 py-3 text-sm shadow-[2px_2px_0_0_#000] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0_0_#000] transition-all">
             <div className="relative">
               <input type="checkbox" checked={field.required} onChange={(e) => onUpdate({ required: e.target.checked })} className="peer sr-only" />
-              <div className="h-5 w-9 rounded-full border border-[color:var(--color-border)] bg-white transition-colors peer-checked:border-[color:var(--color-saffron)] peer-checked:bg-[color:var(--color-saffron)]" />
-              <div className="absolute left-0.5 top-0.5 h-4 w-4 rounded-full bg-[color:var(--color-border)] shadow transition-all peer-checked:translate-x-4 peer-checked:bg-white" />
+              <div className="h-5 w-9 rounded-full border-2 border-black bg-[color:var(--color-card)] transition-colors peer-checked:bg-[color:var(--color-saffron)]" />
+              <div className="absolute left-0.5 top-0.5 h-4 w-4 rounded-full border border-black bg-[color:var(--color-cream)] transition-all peer-checked:translate-x-4" />
             </div>
-            <span className="font-medium text-[color:var(--color-dark)]">Required</span>
-            <span className="text-[color:var(--color-muted)]">— respondents must answer this</span>
+            <span className="font-bold text-[color:var(--color-dark)]">Required</span>
+            <span className="text-[color:var(--color-muted)] font-medium">— respondents must answer this</span>
           </label>
         </div>
       )}
@@ -463,7 +465,7 @@ function BannerUploader({
     <div className="space-y-2">
       {/* Cover preview */}
       <div
-        className="relative flex h-28 items-center justify-center overflow-hidden rounded-[14px]"
+        className="relative flex h-28 items-center justify-center overflow-hidden rounded-xl border-2 border-black"
         style={coverImageUrl ? {} : { background: coverGradient }}
       >
         {coverImageUrl ? (
@@ -472,11 +474,11 @@ function BannerUploader({
         ) : null}
         <div className={`absolute inset-0 flex items-center justify-center gap-3 ${coverImageUrl ? "bg-black/40" : ""}`}>
           <button type="button" onClick={() => inputRef.current?.click()} disabled={uploading}
-            className="inline-flex items-center gap-2 rounded-full border border-white/60 bg-white/20 px-4 py-2 text-sm font-medium text-white backdrop-blur-sm transition hover:bg-white/30 disabled:opacity-50">
+            className="inline-flex items-center gap-2 rounded-lg border-2 border-black bg-[color:var(--color-card)] px-4 py-2 text-sm font-bold text-[color:var(--color-dark)] shadow-[2px_2px_0_0_#000] hover:shadow-[3px_3px_0_0_#000] hover:-translate-x-[1px] hover:-translate-y-[1px] active:translate-x-0 active:translate-y-0 active:shadow-none transition-all disabled:opacity-50">
             {uploading ? (
               <svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none" aria-hidden>
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="white" strokeWidth="3" />
-                <path className="opacity-75" fill="white" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" />
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
               </svg>
             ) : (
               <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" className="h-4 w-4" aria-hidden>
@@ -488,8 +490,8 @@ function BannerUploader({
           </button>
           {coverImageUrl && (
             <button type="button" onClick={onRemoveImage}
-              className="inline-flex items-center gap-1.5 rounded-full border border-white/50 bg-black/30 px-3 py-2 text-xs font-medium text-white backdrop-blur-sm transition hover:bg-black/50">
-              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" className="h-3.5 w-3.5" aria-hidden>
+              className="inline-flex items-center gap-1.5 rounded-lg border-2 border-black bg-red-100 px-3 py-2 text-xs font-bold text-red-600 shadow-[2px_2px_0_0_#000] hover:shadow-[3px_3px_0_0_#000] hover:-translate-x-[1px] hover:-translate-y-[1px] active:translate-x-0 active:translate-y-0 active:shadow-none transition-all">
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2.5" className="h-3.5 w-3.5" aria-hidden>
                 <path d="M4 4l8 8M12 4l-8 8" strokeLinecap="round" />
               </svg>
               Remove
@@ -499,8 +501,8 @@ function BannerUploader({
         <input ref={inputRef} type="file" accept="image/jpeg,image/png,image/webp,image/gif" className="sr-only"
           onChange={(e) => { const f = e.target.files?.[0]; if (f) handleFile(f); e.target.value = ""; }} />
       </div>
-      {error && <p className="text-xs text-red-500">{error}</p>}
-      <p className="text-xs text-[color:var(--color-muted)]">JPG, PNG, WebP · max 5 MB · or use gradient colours below</p>
+      {error && <p className="text-xs font-bold text-red-600">{error}</p>}
+      <p className="text-xs text-[color:var(--color-muted)] font-medium">JPG, PNG, WebP · max 5 MB · or use gradient colours below</p>
     </div>
   );
 }
@@ -509,13 +511,13 @@ function BannerUploader({
 
 function SettingsPanel({ settings, onChange }: { settings: FormSettings; onChange: (s: FormSettings) => void }) {
   return (
-    <div className="space-y-4 rounded-[18px] border border-[color:var(--color-border)] bg-white p-5">
-      <p className="text-sm font-semibold text-[color:var(--color-dark)]">Response settings</p>
+    <div className="space-y-4 rounded-xl border-2 border-black bg-[color:var(--color-card)] p-5 shadow-[4px_4px_0_0_#000]">
+      <p className="text-sm font-bold text-[color:var(--color-dark)]">Response settings</p>
 
       <div className="space-y-3">
         {/* Confirmation message */}
         <div className="space-y-1.5">
-          <label className="text-xs font-semibold uppercase tracking-[0.13em] text-[color:var(--color-muted)]">
+          <label className="text-xs font-bold uppercase tracking-[0.13em] text-[color:var(--color-dark)]">
             Confirmation message
           </label>
           <textarea
@@ -524,7 +526,7 @@ function SettingsPanel({ settings, onChange }: { settings: FormSettings; onChang
             className="vsm-input min-h-[72px] resize-y text-sm"
             placeholder="e.g. Thank you! Our team will be in touch soon. 🙏"
           />
-          <p className="text-xs text-[color:var(--color-muted)]">Shown on the success page after submission.</p>
+          <p className="text-xs text-[color:var(--color-muted)] font-medium">Shown on the success page after submission.</p>
         </div>
 
         {/* Toggles */}
@@ -533,15 +535,15 @@ function SettingsPanel({ settings, onChange }: { settings: FormSettings; onChang
           { key: "showSummaryToRespondents" as const, label: "Show response summary to respondents", hint: "Respondents can see aggregate stats after submitting" },
           { key: "allowResponseEditing" as const, label: "Allow response editing", hint: "Respondents can edit their submission after submitting" },
         ].map(({ key, label, hint }) => (
-          <label key={key} className="flex cursor-pointer items-start gap-3 rounded-[12px] border border-[color:var(--color-border)] bg-[color:var(--color-cream)] px-4 py-3">
+          <label key={key} className="flex cursor-pointer items-start gap-3 rounded-xl border-2 border-black bg-[color:var(--color-cream)] px-4 py-3 shadow-[2px_2px_0_0_#000] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0_0_#000] transition-all">
             <div className="relative mt-0.5 shrink-0">
               <input type="checkbox" checked={settings[key] ?? false} onChange={(e) => onChange({ ...settings, [key]: e.target.checked })} className="peer sr-only" />
-              <div className="h-5 w-9 rounded-full border border-[color:var(--color-border)] bg-white transition-colors peer-checked:border-[color:var(--color-saffron)] peer-checked:bg-[color:var(--color-saffron)]" />
-              <div className="absolute left-0.5 top-0.5 h-4 w-4 rounded-full bg-[color:var(--color-border)] shadow transition-all peer-checked:translate-x-4 peer-checked:bg-white" />
+              <div className="h-5 w-9 rounded-full border-2 border-black bg-[color:var(--color-card)] transition-colors peer-checked:bg-[color:var(--color-saffron)]" />
+              <div className="absolute left-0.5 top-0.5 h-4 w-4 rounded-full border border-black bg-[color:var(--color-cream)] transition-all peer-checked:translate-x-4" />
             </div>
             <div>
-              <p className="text-sm font-medium text-[color:var(--color-dark)]">{label}</p>
-              <p className="text-xs text-[color:var(--color-muted)]">{hint}</p>
+              <p className="text-sm font-bold text-[color:var(--color-dark)]">{label}</p>
+              <p className="text-xs text-[color:var(--color-muted)] font-medium">{hint}</p>
             </div>
           </label>
         ))}
@@ -649,44 +651,44 @@ export function FormBuilder({ form }: { form: VSMForm }) {
   return (
     <div className="flex min-h-screen flex-col">
       {/* sticky top bar */}
-      <header className="sticky top-0 z-30 border-b border-[color:var(--color-border)] bg-[color:rgba(253,246,236,0.96)] backdrop-blur-sm">
+      <header className="sticky top-0 z-30 border-b-2 border-black bg-[color:var(--color-cream)]/95 backdrop-blur-sm">
         <div className="flex items-center gap-3 px-4 py-3 sm:px-6">
           <Link href="/admin/forms"
-            className="shrink-0 rounded-[10px] border border-[color:var(--color-border)] p-2 text-[color:var(--color-muted)] transition-colors hover:border-[color:rgba(232,100,10,0.3)] hover:text-[color:var(--color-saffron)]"
+            className="shrink-0 rounded-lg border-2 border-black p-2 bg-[color:var(--color-card)] text-[color:var(--color-dark)] shadow-[2px_2px_0_0_#000] transition-all hover:bg-[color:var(--color-cream)] hover:shadow-[3px_3px_0_0_#000] hover:-translate-x-[1px] hover:-translate-y-[1px] active:translate-x-0 active:translate-y-0 active:shadow-none"
             aria-label="Back to forms">
-            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" className="h-4 w-4" aria-hidden>
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2.5" className="h-4 w-4" aria-hidden>
               <path d="M10 12L6 8l4-4" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </Link>
           <input value={title} onChange={(e) => { setTitle(e.target.value); markDirty(); }}
-            className="min-w-0 flex-1 rounded-[10px] border border-transparent bg-transparent px-2 py-1.5 font-serif text-lg text-[color:var(--color-dark)] outline-none transition-colors hover:border-[color:var(--color-border)] focus:border-[color:var(--color-saffron)] focus:bg-white focus:shadow-[0_0_0_3px_rgba(232,100,10,0.1)]"
+            className="min-w-0 flex-1 rounded-lg border-2 border-transparent bg-transparent px-2 py-1.5 font-serif text-lg font-bold text-[color:var(--color-dark)] outline-none transition-all hover:border-black focus:border-[color:var(--color-saffron)] focus:bg-[color:var(--color-card)] focus:shadow-[2px_2px_0_0_#000]"
             placeholder="Form title…" />
-          <select value={team} onChange={(e) => handleTeamChange(e.target.value as Team)} className="vsm-input w-auto min-w-[130px] py-2 text-sm">
+          <select value={team} onChange={(e) => handleTeamChange(e.target.value as Team)} className="vsm-input w-auto min-w-[130px] py-2 text-sm bg-[color:var(--color-cream)] border-2 border-black shadow-[2px_2px_0_0_#000] focus:shadow-none focus:translate-x-[1px] focus:translate-y-[1px] transition-all cursor-pointer">
             {TEAMS.map((t) => <option key={t} value={t}>{t}</option>)}
           </select>
-          <select value={status} onChange={(e) => { setStatus(e.target.value as FormStatus); markDirty(); }} className="vsm-input w-auto min-w-[110px] py-2 text-sm">
+          <select value={status} onChange={(e) => { setStatus(e.target.value as FormStatus); markDirty(); }} className="vsm-input w-auto min-w-[110px] py-2 text-sm bg-[color:var(--color-cream)] border-2 border-black shadow-[2px_2px_0_0_#000] focus:shadow-none focus:translate-x-[1px] focus:translate-y-[1px] transition-all cursor-pointer">
             <option value="draft">Draft</option>
             <option value="active">Published</option>
             <option value="closed">Closed</option>
           </select>
           {saveState === "saved" && (
-            <span className="hidden shrink-0 items-center gap-1.5 text-sm font-medium text-[color:#15803D] sm:flex">
-              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" className="h-4 w-4" aria-hidden>
+            <span className="hidden shrink-0 items-center gap-1.5 text-sm font-bold text-[color:#15803D] sm:flex">
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2.5" className="h-4 w-4" aria-hidden>
                 <path d="M2 8l4 4 8-8" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
               Saved
             </span>
           )}
-          {saveState === "error" && <span className="hidden shrink-0 text-sm text-red-500 sm:block">Error saving</span>}
+          {saveState === "error" && <span className="hidden shrink-0 text-sm font-bold text-red-600 sm:block">Error saving</span>}
           <button type="button" onClick={handleSave} disabled={isPending}
-            className="shrink-0 inline-flex items-center gap-2 rounded-[10px] bg-[color:var(--color-saffron)] px-4 py-2 text-sm font-semibold text-white shadow-warm transition-all hover:-translate-y-px hover:bg-[color:var(--color-saffron-dark)] disabled:opacity-60">
+            className="shrink-0 inline-flex items-center gap-2 rounded-lg border-2 border-black bg-[color:var(--color-saffron)] px-4 py-2 text-sm font-bold text-white shadow-[3px_3px_0_0_#000] transition-all hover:bg-[color:var(--color-saffron-dark)] hover:-translate-x-[1px] hover:-translate-y-[1px] hover:shadow-[4px_4px_0_0_#000] active:translate-x-0 active:translate-y-0 active:shadow-none disabled:opacity-60 disabled:pointer-events-none">
             {isPending ? (
               <><svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none" aria-hidden>
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="white" strokeWidth="3" />
                 <path className="opacity-80" fill="white" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
               </svg>Saving…</>
             ) : (
-              <><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" className="h-4 w-4" aria-hidden>
+              <><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2.5" className="h-4 w-4" aria-hidden>
                 <path d="M13 5l-6 6-3-3" strokeLinecap="round" strokeLinejoin="round" />
               </svg>Save</>
             )}
@@ -696,17 +698,17 @@ export function FormBuilder({ form }: { form: VSMForm }) {
 
       <div className="flex flex-1 flex-col lg:flex-row">
         {/* left panel: field palette + tab toggle */}
-        <aside className="shrink-0 border-b border-[color:var(--color-border)] bg-[color:var(--color-card)] lg:w-[260px] lg:border-b-0 lg:border-r">
+        <aside className="shrink-0 border-b-2 border-black bg-[color:var(--color-card)] lg:w-[260px] lg:border-b-0 lg:border-r-2 lg:border-black">
           <div className="lg:sticky lg:top-[61px] lg:max-h-[calc(100vh-61px)] lg:overflow-y-auto">
             {/* Tabs */}
-            <div className="flex border-b border-[color:var(--color-border)]">
+            <div className="flex border-b-2 border-black">
               {(["fields", "settings"] as const).map((tab) => (
                 <button key={tab} type="button" onClick={() => setActiveTab(tab)}
-                  className={`flex-1 py-3 text-xs font-semibold uppercase tracking-[0.13em] transition-colors ${
+                  className={`flex-1 py-3 text-xs font-bold uppercase tracking-[0.13em] transition-all ${
                     activeTab === tab
-                      ? "border-b-2 border-[color:var(--color-saffron)] text-[color:var(--color-saffron)]"
-                      : "text-[color:var(--color-muted)] hover:text-[color:var(--color-dark)]"
-                  }`}>
+                      ? "bg-[color:var(--color-cream)] text-[color:var(--color-saffron)] border-b-2 border-transparent font-extrabold"
+                      : "bg-[color:var(--color-card)] text-[color:var(--color-muted)] hover:text-[color:var(--color-dark)] border-b-2 border-black"
+                  } ${tab === "fields" ? "border-r-2 border-black" : ""}`}>
                   {tab === "fields" ? "Fields" : "Settings"}
                 </button>
               ))}
@@ -714,15 +716,15 @@ export function FormBuilder({ form }: { form: VSMForm }) {
 
             {activeTab === "fields" ? (
               <div className="p-4 pb-6 lg:p-5">
-                <p className="mb-3 text-xs font-semibold uppercase tracking-[0.15em] text-[color:var(--color-muted)]">Add a field</p>
+                <p className="mb-3 text-xs font-bold uppercase tracking-[0.15em] text-[color:var(--color-dark)]">Add a field</p>
                 <div className="grid grid-cols-2 gap-2 lg:grid-cols-1">
                   {FIELD_TYPES.map(({ type, label, hint, icon }) => (
                     <button key={type} type="button" onClick={() => addField(type)}
-                      className="group flex items-center gap-3 rounded-[12px] border border-[color:var(--color-border)] bg-white px-3 py-2.5 text-left transition-all duration-150 hover:border-[color:rgba(232,100,10,0.4)] hover:bg-[color:rgba(232,100,10,0.04)] hover:shadow-[0_2px_8px_rgba(232,100,10,0.1)]">
+                      className="group flex items-center gap-3 rounded-xl border-2 border-black bg-[color:var(--color-card)] px-3 py-2.5 text-left shadow-[2px_2px_0_0_#000] transition-all duration-150 hover:border-[color:var(--color-saffron)] hover:shadow-[3px_3px_0_0_#E8640A] hover:-translate-x-[1px] hover:-translate-y-[1px] active:translate-x-0 active:translate-y-0 active:shadow-none">
                       <span className="shrink-0 text-[color:var(--color-muted)] transition-colors group-hover:text-[color:var(--color-saffron)]">{icon}</span>
                       <div className="min-w-0">
-                        <p className="text-sm font-medium leading-tight text-[color:var(--color-dark)]">{label}</p>
-                        <p className="text-[11px] text-[color:var(--color-muted)]">{hint}</p>
+                        <p className="text-sm font-bold leading-tight text-[color:var(--color-dark)]">{label}</p>
+                        <p className="text-[11px] text-[color:var(--color-muted)] font-medium">{hint}</p>
                       </div>
                     </button>
                   ))}
@@ -740,7 +742,7 @@ export function FormBuilder({ form }: { form: VSMForm }) {
         <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
           <div className="mx-auto max-w-[680px] space-y-5">
             {/* Form meta card */}
-            <div className="overflow-hidden rounded-[22px] border border-[color:var(--color-border)] bg-white shadow-warm">
+            <div className="overflow-hidden rounded-2xl border-2 border-black bg-[color:var(--color-card)] shadow-[4px_4px_0_0_#000]">
               <div className="p-5 space-y-4" onClick={(e) => e.stopPropagation()}>
                 {/* Banner uploader */}
                 <BannerUploader
@@ -753,26 +755,26 @@ export function FormBuilder({ form }: { form: VSMForm }) {
 
                 {/* Description */}
                 <div className="space-y-1.5">
-                  <label className="text-xs font-semibold uppercase tracking-[0.13em] text-[color:var(--color-muted)]">Description</label>
+                  <label className="text-xs font-bold uppercase tracking-[0.13em] text-[color:var(--color-dark)]">Description</label>
                   <textarea value={description} onChange={(e) => { setDescription(e.target.value); markDirty(); }}
                     className="vsm-input min-h-[80px] resize-y text-sm" placeholder="Describe this initiative for volunteers…" />
                 </div>
 
                 {/* Closing date */}
                 <div className="space-y-1.5">
-                  <label className="text-xs font-semibold uppercase tracking-[0.13em] text-[color:var(--color-muted)]">
-                    Closing date <span className="font-normal normal-case tracking-normal">(optional)</span>
+                  <label className="text-xs font-bold uppercase tracking-[0.13em] text-[color:var(--color-dark)]">
+                    Closing date <span className="font-normal normal-case tracking-normal text-[color:var(--color-muted)]">(optional)</span>
                   </label>
                   <input type="date" value={closingDate} onChange={(e) => { setClosingDate(e.target.value); markDirty(); }} className="vsm-input text-sm" />
                 </div>
 
                 {/* Gradient swatches */}
                 <div className="space-y-1.5">
-                  <p className="text-xs font-semibold uppercase tracking-[0.13em] text-[color:var(--color-muted)]">Gradient fallback colour</p>
+                  <p className="text-xs font-bold uppercase tracking-[0.13em] text-[color:var(--color-dark)]">Gradient fallback colour</p>
                   <div className="flex flex-wrap gap-2">
                     {Object.entries(TEAM_GRADIENTS).map(([t, g]) => (
                       <button key={t} type="button" title={t} onClick={() => { setCoverGradient(g); markDirty(); }}
-                        className={`h-8 w-8 rounded-full transition-all hover:scale-110 ${coverGradient === g ? "ring-2 ring-[color:var(--color-dark)] ring-offset-2" : ""}`}
+                        className={`h-8 w-8 rounded-full border-2 border-black transition-all hover:scale-110 ${coverGradient === g ? "ring-2 ring-[color:var(--color-saffron)] ring-offset-2 scale-110" : ""}`}
                         style={{ background: g }} aria-label={`${t} colour`} />
                     ))}
                   </div>
@@ -782,25 +784,25 @@ export function FormBuilder({ form }: { form: VSMForm }) {
 
             {/* Field cards */}
             {fields.length === 0 ? (
-              <div className="rounded-[22px] border-2 border-dashed border-[color:var(--color-border)] bg-white px-6 py-14 text-center">
-                <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-[color:rgba(232,100,10,0.07)]">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-7 w-7 text-[color:var(--color-saffron)]" aria-hidden>
+              <div className="rounded-2xl border-2 border-dashed border-black bg-[color:var(--color-card)] px-6 py-14 text-center shadow-[4px_4px_0_0_#000]">
+                <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-[color:rgba(232,100,10,0.07)] border-2 border-black">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="h-7 w-7 text-[color:var(--color-saffron)]" aria-hidden>
                     <path d="M12 4v16m-8-8h16" strokeLinecap="round" />
                   </svg>
                 </div>
-                <p className="font-serif text-lg text-[color:var(--color-dark)]">No fields yet</p>
-                <p className="mt-1 text-sm text-[color:var(--color-muted)]">Click a field type on the left to add your first question.</p>
+                <p className="font-serif text-lg font-bold text-[color:var(--color-dark)]">No fields yet</p>
+                <p className="mt-1 text-sm text-[color:var(--color-muted)] font-medium">Click a field type on the left to add your first question.</p>
               </div>
             ) : (
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <p className="text-xs font-semibold uppercase tracking-[0.13em] text-[color:var(--color-muted)]">
+                  <p className="text-xs font-bold uppercase tracking-[0.13em] text-[color:var(--color-dark)]">
                     Fields
                   </p>
                   <button
                     type="button"
                     onClick={() => setActiveId(null)}
-                    className="text-xs font-semibold uppercase tracking-[0.13em] text-[color:var(--color-muted)] transition-colors hover:text-[color:var(--color-saffron)]"
+                    className="text-xs font-bold uppercase tracking-[0.13em] text-[color:var(--color-muted)] transition-colors hover:text-[color:var(--color-saffron)]"
                   >
                     Collapse all
                   </button>
@@ -824,7 +826,7 @@ export function FormBuilder({ form }: { form: VSMForm }) {
             )}
 
             {fields.length > 0 && (
-              <div className="rounded-[14px] border border-dashed border-[color:var(--color-border)] px-4 py-3 text-center text-sm text-[color:var(--color-muted)]">
+              <div className="rounded-xl border-2 border-dashed border-black bg-[color:var(--color-card)] px-4 py-3 text-center text-sm text-[color:var(--color-dark)] font-bold shadow-[2px_2px_0_0_#000]">
                 Click a field type on the left to add more questions
               </div>
             )}

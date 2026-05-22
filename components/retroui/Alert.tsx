@@ -44,7 +44,7 @@ AlertTitle.displayName = "AlertTitle";
 interface IAlertDescriptionProps
   extends HtmlHTMLAttributes<HTMLParagraphElement> {}
 const AlertDescription = ({ className, ...props }: IAlertDescriptionProps) => (
-  <div className={cn("text-muted-foreground", className)} {...props} />
+  <div className={cn("text-sm opacity-90 font-medium", className)} {...props} />
 );
 
 AlertDescription.displayName = "AlertDescription";

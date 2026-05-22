@@ -1,4 +1,4 @@
-export type Team = "Yuva Chetana" | "Gram Vikas" | "Nalanda" | "MUSE" | "SDA";
+export type Team = "Yuva Chetana" | "Gram Vikas" | "Nalanda" | "MUSE" | "SDA" | "ECC" | "Others";
 export type FormStatus = "active" | "draft" | "closed";
 export type FieldType =
   | "text"
@@ -41,6 +41,8 @@ export const TEAM_COLORS: Record<Team, { bg: string; text: string; border: strin
   "Nalanda":      { bg: "#DBEAFE", text: "#1E3A8A", border: "#BFDBFE" },
   "MUSE":         { bg: "#FCE7F3", text: "#831843", border: "#FBCFE8" },
   "SDA":          { bg: "#EDE9FE", text: "#4C1D95", border: "#DDD6FE" },
+  "ECC":          { bg: "#CCFBF1", text: "#115E59", border: "#99F6E4" },
+  "Others":       { bg: "#F3F4F6", text: "#374151", border: "#E5E7EB" },
 };
 
 export const TEAM_DOTS: Record<Team, string> = {
@@ -49,6 +51,8 @@ export const TEAM_DOTS: Record<Team, string> = {
   "Nalanda":      "#1E4FC2",
   "MUSE":         "#D43E8D",
   "SDA":          "#7C3AED",
+  "ECC":          "#0F766E",
+  "Others":       "#6B7280",
 };
 
 export const mockForms: VSMForm[] = [
@@ -281,6 +285,8 @@ export const mockAnalytics = {
     { team: "Nalanda" as Team, count: 45 },
     { team: "MUSE" as Team, count: 0 },
     { team: "SDA" as Team, count: 156 },
+    { team: "ECC" as Team, count: 0 },
+    { team: "Others" as Team, count: 0 },
   ],
   teamTable: [
     { team: "Yuva Chetana" as Team, forms: 1, responses: 89, lastActivity: "2026-04-19" },
@@ -288,5 +294,7 @@ export const mockAnalytics = {
     { team: "Nalanda" as Team, forms: 1, responses: 45, lastActivity: "2026-04-18" },
     { team: "MUSE" as Team, forms: 1, responses: 0, lastActivity: "2026-04-28" },
     { team: "SDA" as Team, forms: 1, responses: 156, lastActivity: "2026-01-31" },
+    { team: "ECC" as Team, forms: 0, responses: 0, lastActivity: "2026-05-22" },
+    { team: "Others" as Team, forms: 0, responses: 0, lastActivity: "2026-05-22" },
   ],
 };

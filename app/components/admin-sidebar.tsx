@@ -67,13 +67,13 @@ function AdminNavItem({
   return (
     <Link
       href={href}
-      className={`flex items-center gap-3 rounded-[14px] border-l-[3px] px-4 py-2.5 text-sm font-medium transition-all duration-150 ${
+      className={`flex items-center gap-3 rounded-[12px] border-2 px-4 py-2.5 text-sm font-bold transition-all duration-150 hover:-translate-y-[1px] active:translate-y-0 ${
         active
-          ? "border-[color:var(--color-saffron)] bg-white text-[color:var(--color-dark)] shadow-[0_1px_6px_rgba(90,50,10,0.08)]"
-          : "border-transparent text-[color:var(--color-muted)] hover:bg-white/70 hover:text-[color:var(--color-dark)]"
+          ? "border-black bg-[color:var(--color-saffron)] text-white shadow-[2px_2px_0_0_#000]"
+          : "border-transparent text-muted-foreground hover:border-black hover:bg-[color:var(--color-cream)] hover:text-[color:var(--color-dark)] hover:shadow-[2px_2px_0_0_#000]"
       }`}
     >
-      <span className={active ? "text-[color:var(--color-saffron)]" : ""}>{icon}</span>
+      <span className={active ? "text-white" : "text-muted-foreground group-hover:text-[color:var(--color-dark)]"}>{icon}</span>
       {label}
     </Link>
   );

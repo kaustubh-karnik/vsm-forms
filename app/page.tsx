@@ -20,7 +20,7 @@ export default async function Home() {
   const closedForms = forms.filter((form) => form.status === "closed");
 
   return (
-    <main className="relative min-h-screen overflow-hidden bg-[color:var(--color-cream)] px-4 py-12 sm:py-16">
+    <main className="relative min-h-screen overflow-hidden px-4 py-12 sm:py-16">
       <div className="mx-auto flex w-full max-w-[560px] flex-col items-center gap-8">
 
         {/* Logo & Branding Section - Redesigned as a Premium Neobrutalist Profile Card */}
@@ -136,7 +136,7 @@ export default async function Home() {
               ))
             ) : (
               <Card className="block rounded-[20px] border-2 border-[color:var(--color-border)] bg-white p-6 text-center shadow-[4px_4px_0_0_var(--border)]">
-                <Text as="p" className="text-[color:var(--color-muted)]">
+                <Text as="p" className="text-[color:var(--color-dark)]">
                   No active forms at the moment. Check back soon!
                 </Text>
               </Card>

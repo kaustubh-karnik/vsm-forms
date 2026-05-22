@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-import { FormCover, TeamBadge, VsmLogo } from "@/app/components/vsm-ui";
+import { TeamBadge, VsmLogo } from "@/app/components/vsm-ui";
 import { getFormById } from "@/lib/supabase";
 
 export default async function SuccessPage({
@@ -25,6 +25,19 @@ export default async function SuccessPage({
     `Your registration for ${form.title} has been received. Our team will be in touch soon. 🙏`;
   const hasFileField = form.fields.some((field) => field.type === "file");
 
+  const urlRegex = /(https?:\/\/\S+)/gi;
+  const urlMatch = confirmationMessage.match(urlRegex);
+  const firstLink = urlMatch?.[0];
+  const cleanedMessage = firstLink
+    ? confirmationMessage.replace(urlRegex, "").replace(/\s{2,}/g, " ").trim()
+    : confirmationMessage;
+  const confirmationLink = form.settings?.confirmationLink?.url &&
+    form.settings.confirmationLink.url !== "https://" &&
+    form.settings.confirmationLink.label
+      ? form.settings.confirmationLink
+      : null;
+  const actionLink = confirmationLink ?? (firstLink ? { url: firstLink, label: "Open link" } : null);
+
   const whatsappText = encodeURIComponent(
     `I just registered for ${form.title} by Vivekanand Seva Mandal! Join me: https://vsm-forms.vercel.app/forms/${form.id}`
   );
@@ -36,11 +49,6 @@ export default async function SuccessPage({
 
       <div className="mx-auto w-full max-w-[520px]">
         <article className="overflow-hidden rounded-[20px] border-2 border-black bg-[color:var(--color-card)] shadow-[6px_6px_0_0_#000]">
-          <div className="relative">
-            <FormCover form={form} />
-            {!form.coverImageUrl && <div className="absolute inset-0 bg-black/30" />}
-          </div>
-
           <div className="space-y-6 p-6 text-center sm:p-8">
             <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full border-2 border-black bg-[color:var(--color-saffron)] shadow-[3px_3px_0_0_#000]">
               <svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="h-9 w-9" aria-hidden>
@@ -53,7 +61,7 @@ export default async function SuccessPage({
                 Thank you, {displayName}!
               </h1>
               <p className="text-sm leading-7 text-[color:var(--color-muted)]">
-                {confirmationMessage}
+                {cleanedMessage}
               </p>
               {hasFileField && (
                 <div className="mx-auto mt-4 flex max-w-[420px] items-center justify-center gap-2 rounded-[10px] border-2 border-black bg-[#DCFCE7] px-3 py-2 text-xs font-bold text-[#166534] shadow-[2px_2px_0_0_#000]">
@@ -63,7 +71,27 @@ export default async function SuccessPage({
               )}
             </div>
 
-            <TeamBadge team={form.team} />
+            <div className="flex flex-col items-center gap-1.5">
+              {actionLink && (
+                <a
+                  href={actionLink.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center gap-2 rounded-[10px] border-2 border-black bg-[color:var(--color-saffron)] px-4 py-2.5 text-xs font-bold font-white shadow-[3px_3px_0_0_#000] transition-all hover:-translate-y-px hover:shadow-[4px_4px_0_0_#000] active:translate-y-0 active:shadow-none"
+                >
+                  <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" className="h-4 w-4 shrink-0" aria-hidden>
+                    <path d="M6 9a3 3 0 0 0 4.243.243l2-2a3 3 0 0 0-4.243-4.243l-1 1" strokeLinecap="round" />
+                    <path d="M10 7a3 3 0 0 0-4.243-.243l-2 2a3 3 0 0 0 4.243 4.243l1-1" strokeLinecap="round" />
+                  </svg>
+                  {actionLink.label}
+                  <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" className="h-3.5 w-3.5 shrink-0 opacity-70" aria-hidden>
+                    <path d="M3 8h10M9 4l4 4-4 4" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </a>
+              )}
+
+              {/* <TeamBadge team={form.team} /> */}
+            </div>
 
             <div className="flex flex-col gap-3 pt-2">
               <a
@@ -77,6 +105,7 @@ export default async function SuccessPage({
                 </svg>
                 Share on WhatsApp
               </a>
+
               <Link
                 href="/"
                 className="inline-flex w-full items-center justify-center rounded-[10px] border-2 border-black bg-[color:var(--color-card)] px-4 py-3 text-sm font-bold text-[color:var(--color-dark)] shadow-[3px_3px_0_0_#000] transition-all hover:-translate-y-px hover:shadow-[4px_4px_0_0_#000] active:translate-y-0 active:shadow-none hover:text-[color:var(--color-saffron)]"

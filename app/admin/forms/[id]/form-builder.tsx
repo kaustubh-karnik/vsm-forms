@@ -510,6 +510,17 @@ function BannerUploader({
 // ─── settings panel ───────────────────────────────────────────────────────────
 
 function SettingsPanel({ settings, onChange }: { settings: FormSettings; onChange: (s: FormSettings) => void }) {
+  const linkEnabled = !!(settings.confirmationLink);
+
+  function toggleLink(checked: boolean) {
+    if (checked) {
+      onChange({ ...settings, confirmationLink: { label: "Learn more", url: "https://" } });
+    } else {
+      const { confirmationLink: _, ...rest } = settings;
+      onChange(rest);
+    }
+  }
+
   return (
     <div className="space-y-4 rounded-xl border-2 border-black bg-[color:var(--color-card)] p-5 shadow-[4px_4px_0_0_#000]">
       <p className="text-sm font-bold text-[color:var(--color-dark)]">Response settings</p>
@@ -527,6 +538,101 @@ function SettingsPanel({ settings, onChange }: { settings: FormSettings; onChang
             placeholder="e.g. Thank you! Our team will be in touch soon. 🙏"
           />
           <p className="text-xs text-[color:var(--color-muted)] font-medium">Shown on the success page after submission.</p>
+        </div>
+
+        {/* ── Confirmation hyperlink ── */}
+        <div className="rounded-xl border-2 border-black bg-[color:var(--color-cream)] shadow-[2px_2px_0_0_#000] overflow-hidden">
+          {/* Toggle row */}
+          <label className="flex cursor-pointer items-center gap-3 px-4 py-3 transition-all hover:bg-[color:var(--color-cream)]/70">
+            <div className="relative shrink-0">
+              <input
+                type="checkbox"
+                checked={linkEnabled}
+                onChange={(e) => toggleLink(e.target.checked)}
+                className="peer sr-only"
+              />
+              <div className="h-5 w-9 rounded-full border-2 border-black bg-[color:var(--color-card)] transition-colors peer-checked:bg-[color:var(--color-saffron)]" />
+              <div className="absolute left-0.5 top-0.5 h-4 w-4 rounded-full border border-black bg-[color:var(--color-cream)] transition-all peer-checked:translate-x-4" />
+            </div>
+            <div>
+              <p className="text-sm font-bold text-[color:var(--color-dark)]">Add a hyperlink</p>
+              <p className="text-xs text-[color:var(--color-muted)] font-medium">Show a clickable link at the bottom of the success page</p>
+            </div>
+          </label>
+
+          {/* Inputs — only shown when enabled */}
+          {linkEnabled && (
+            <div className="border-t-2 border-black px-4 pb-4 pt-3 space-y-3">
+              {/* Link label */}
+              <div className="space-y-1">
+                <label className="text-xs font-bold uppercase tracking-[0.12em] text-[color:var(--color-dark)]">
+                  Button text
+                </label>
+                <input
+                  type="text"
+                  value={settings.confirmationLink?.label ?? ""}
+                  onChange={(e) =>
+                    onChange({
+                      ...settings,
+                      confirmationLink: {
+                        label: e.target.value,
+                        url: settings.confirmationLink?.url ?? "https://",
+                      },
+                    })
+                  }
+                  className="vsm-input text-sm"
+                  placeholder="e.g. Join our WhatsApp group"
+                />
+              </div>
+
+              {/* Link URL */}
+              <div className="space-y-1">
+                <label className="text-xs font-bold uppercase tracking-[0.12em] text-[color:var(--color-dark)]">
+                  URL
+                </label>
+                <div className="relative">
+                  <span className="pointer-events-none absolute inset-y-0 left-3 flex items-center">
+                    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" className="h-3.5 w-3.5 text-[color:var(--color-muted)]" aria-hidden>
+                      <path d="M6 9a3 3 0 0 0 4.243.243l2-2a3 3 0 0 0-4.243-4.243l-1 1" strokeLinecap="round" />
+                      <path d="M10 7a3 3 0 0 0-4.243-.243l-2 2a3 3 0 0 0 4.243 4.243l1-1" strokeLinecap="round" />
+                    </svg>
+                  </span>
+                  <input
+                    type="url"
+                    value={settings.confirmationLink?.url ?? ""}
+                    onChange={(e) =>
+                      onChange({
+                        ...settings,
+                        confirmationLink: {
+                          label: settings.confirmationLink?.label ?? "Learn more",
+                          url: e.target.value,
+                        },
+                      })
+                    }
+                    className="vsm-input pl-8 text-sm"
+                    placeholder="https://chat.whatsapp.com/..."
+                  />
+                </div>
+                <p className="text-xs text-[color:var(--color-muted)] font-medium">
+                  Must start with https://
+                </p>
+              </div>
+
+              {/* Live preview */}
+              {settings.confirmationLink?.label && settings.confirmationLink?.url && settings.confirmationLink.url !== "https://" && (
+                <div className="rounded-lg border-2 border-dashed border-[color:var(--color-saffron)]/50 bg-[color:rgba(232,100,10,0.04)] px-3 py-2">
+                  <p className="mb-1.5 text-[10px] font-bold uppercase tracking-[0.12em] text-[color:var(--color-saffron)]">Preview</p>
+                  <span className="inline-flex items-center gap-1.5 text-xs font-bold text-[color:var(--color-saffron)] underline underline-offset-2">
+                    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" className="h-3 w-3" aria-hidden>
+                      <path d="M6 9a3 3 0 0 0 4.243.243l2-2a3 3 0 0 0-4.243-4.243l-1 1" strokeLinecap="round" />
+                      <path d="M10 7a3 3 0 0 0-4.243-.243l-2 2a3 3 0 0 0 4.243 4.243l1-1" strokeLinecap="round" />
+                    </svg>
+                    {settings.confirmationLink.label}
+                  </span>
+                </div>
+              )}
+            </div>
+          )}
         </div>
 
         {/* Toggles */}

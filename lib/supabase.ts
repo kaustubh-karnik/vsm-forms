@@ -52,6 +52,7 @@ export interface FormField {
 
 export interface FormSettings {
   confirmationMessage?: string;
+  confirmationLink?: { label: string; url: string };
   limitOneResponse?: boolean;
   showSummaryToRespondents?: boolean;
   allowResponseEditing?: boolean;

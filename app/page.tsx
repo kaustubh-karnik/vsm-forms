@@ -22,25 +22,63 @@ export default async function Home() {
   return (
     <main className="relative min-h-screen overflow-hidden bg-[color:var(--color-cream)] px-4 py-12 sm:py-16">
       <div className="mx-auto flex w-full max-w-[560px] flex-col items-center gap-8">
-        
-        {/* Logo & Branding Section */}
-        <div className="flex flex-col items-center gap-3 text-center">
-          <VsmLogo size={72} tone="warm" />
-          <Text as="h1" className="text-2xl font-semibold leading-tight text-[color:var(--color-dark)]">
-            Vivekanand Seva Mandal
-          </Text>
-          <Text as="p" className="text-sm text-[color:var(--color-dark)]">
-            Dombivli · Since 1991
-          </Text>
-        </div>
 
-        {/* Social Links */}
-        <SocialLinks />
+        {/* Logo & Branding Section - Redesigned as a Premium Neobrutalist Profile Card */}
+        <div className="fade-up fade-up-1 w-full overflow-hidden rounded-[28px] border-2 border-black bg-(--color-card) shadow-[6px_6px_0_0_#000] relative">
+          {/* Accent header bar with retro window control dots and a badge */}
+          <div className="h-16 w-full border-b-2 border-black bg-saffron relative overflow-hidden flex items-center justify-between px-6">
+            {/* Retro dots pattern overlay */}
+            <div className="absolute inset-0 opacity-15" style={{
+              backgroundImage: 'radial-gradient(circle at 1px 1px, black 1px, transparent 0)',
+              backgroundSize: '8px 8px'
+            }} />
+            <div className="flex gap-1.5 z-10">
+              <span className="w-3 h-3 rounded-full border border-black bg-[#FF5F56]" />
+              <span className="w-3 h-3 rounded-full border border-black bg-[#FFBD2E]" />
+              <span className="w-3 h-3 rounded-full border border-black bg-[#27C93F]" />
+            </div>
+            <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-white z-10">
+              VSM Forms v1.0
+            </div>
+          </div>
+
+          <div className="flex flex-col items-center p-6 sm:p-8 text-center relative gap-4">
+            {/* Logo overlapping the header slightly, styled like a retro stamp badge */}
+            <div className="relative -mt-16 sm:-mt-20 flex h-20 w-20 sm:h-24 sm:w-24 items-center justify-center rounded-full border-2 border-black bg-white shadow-[3px_3px_0_0_#000] z-20 overflow-hidden">
+              <img
+                src="/logo.png"
+                alt="Vivekanand Seva Mandal logo"
+                className="h-full w-full object-contain scale-[1]"
+              />
+            </div>
+
+            <div className="space-y-2 mt-1">
+              <Text as="h1" className="font-sans text-2xl sm:text-3xl font-black uppercase tracking-tight text-dark">
+                Vivekanand Seva Mandal
+              </Text>
+
+              {/* Retro dashed badge for establishment details */}
+              <div className="inline-flex items-center gap-1.5 rounded-md border border-dashed border-border bg-[color:var(--color-cream)] px-2.5 py-0.5 text-xs font-semibold text-muted-foreground">
+                <span className="w-1.5 h-1.5 rounded-full bg-saffron animate-pulse" />
+                Dombivli • Since 1991
+              </div>
+            </div>
+
+            <p className="text-sm sm:text-base font-semibold leading-relaxed text-dark/80 max-w-[460px]">
+              A youth-centric social organization transforming lives through action in education, tribal development, healthcare, and youth empowerment.
+            </p>
+
+            {/* Social Links inside Profile Card */}
+            <div className="pt-4 w-full flex justify-center border-t border-dashed border-border mt-1">
+              <SocialLinks />
+            </div>
+          </div>
+        </div>
 
         {/* Active Initiatives Section */}
         <div className="w-full space-y-6">
           <SectionDivider label="Active Initiatives" className="justify-center" />
-          
+
           <div className="space-y-4">
             {activeForms.length > 0 ? (
               activeForms.map((form) => (
@@ -115,17 +153,17 @@ export default async function Home() {
                 <Text as="span" className="font-semibold text-[color:var(--color-dark)]">
                   Show {closedForms.length} closed form{closedForms.length !== 1 ? "s" : ""}
                 </Text>
-                <svg 
-                  className="h-4 w-4 transition-transform duration-200 group-open:rotate-180" 
-                  viewBox="0 0 24 24" 
-                  fill="none" 
-                  stroke="currentColor" 
+                <svg
+                  className="h-4 w-4 transition-transform duration-200 group-open:rotate-180"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
                   strokeWidth="2"
                 >
                   <polyline points="6 9 12 15 18 9" />
                 </svg>
               </summary>
-              
+
               <div className="mt-4 space-y-3">
                 {closedForms.map((form) => (
                   <Link key={form.id} href={`/forms/${form.id}`} className="block">

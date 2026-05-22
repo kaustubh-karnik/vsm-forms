@@ -187,7 +187,7 @@ export function SocialLinks() {
           target="_blank"
           rel="noopener noreferrer"
           aria-label={link.label}
-          className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[color:var(--color-border)] bg-white text-[color:var(--color-muted)] transition-all duration-200 hover:border-[color:rgba(232,100,10,0.28)] hover:bg-[color:rgba(232,100,10,0.06)] hover:text-[color:var(--color-saffron)] hover:shadow-[0_2px_8px_rgba(232,100,10,0.14)]"
+          className="inline-flex h-10 w-10 items-center justify-center rounded-full border-2 border-black bg-white text-dark shadow-[2px_2px_0_0_#000] transition-all duration-200 hover:-translate-y-px hover:shadow-[3px_3px_0_0_#000] active:translate-y-[2px] active:shadow-none hover:text-saffron hover:border-saffron"
         >
           {SocialIcons[link.label]}
         </a>

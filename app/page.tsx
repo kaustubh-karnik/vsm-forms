@@ -44,13 +44,17 @@ export default async function Home() {
 
           <div className="flex flex-col items-center p-6 sm:p-8 text-center relative gap-4">
             {/* Logo overlapping the header slightly, styled like a retro stamp badge */}
-            <div className="relative -mt-16 sm:-mt-20 flex h-20 w-20 sm:h-24 sm:w-24 items-center justify-center rounded-full border-2 border-black bg-white shadow-[3px_3px_0_0_#000] z-20 overflow-hidden">
-              <img
-                src="/logo.png"
-                alt="Vivekanand Seva Mandal logo"
-                className="h-full w-full object-contain scale-[0.9]"
-              />
-            </div>
+            <div
+              className="relative -mt-16 sm:-mt-20 h-20 w-20 sm:h-24 sm:w-24 rounded-full border-2 border-black bg-white shadow-[3px_3px_0_0_#000] z-20"
+              style={{
+                backgroundImage: "url('/logo.png')",
+                backgroundSize: "85%",
+                backgroundPosition: "center 45%",
+                backgroundRepeat: "no-repeat",
+              }}
+              role="img"
+              aria-label="Vivekanand Seva Mandal logo"
+            />
 
             <div className="space-y-2 mt-1">
               <Text as="h1" className="font-sans text-2xl sm:text-3xl font-black uppercase tracking-tight text-dark">

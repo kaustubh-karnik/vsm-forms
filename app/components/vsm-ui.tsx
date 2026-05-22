@@ -262,13 +262,16 @@ export function FormCover({
   className?: string;
   showOverlay?: boolean;
 }) {
+  const cleanPoster = poster && !showOverlay;
   const heightClass = compact
     ? "h-full min-h-[96px]"
     : tall
       ? "aspect-[16/9] min-h-[230px]"
-      : poster
-        ? "h-full min-h-[120px]"
-        : "aspect-[16/9]";
+      : cleanPoster
+        ? "h-full min-h-0"
+        : poster
+          ? "h-full min-h-[120px]"
+          : "aspect-[16/9]";
   const radiusClass =
     roundedClass ??
     (compact
@@ -279,8 +282,10 @@ export function FormCover({
 
   return (
     <div
-      className={`relative w-full overflow-hidden ${heightClass} ${radiusClass} ${className}`}
-      style={form.coverImageUrl ? {} : { background: form.coverGradient }}
+      className={`relative w-full overflow-hidden ${heightClass} ${radiusClass} ${className} ${cleanPoster && form.coverImageUrl ? "bg-white" : ""}`}
+      style={
+        form.coverImageUrl ? (cleanPoster ? undefined : {}) : { background: form.coverGradient }
+      }
     >
       {/* Banner image (takes priority over gradient) */}
       {form.coverImageUrl && (
@@ -288,15 +293,17 @@ export function FormCover({
           src={form.coverImageUrl}
           alt={`${form.title} banner`}
           fill
-          className={poster ? "object-contain" : "object-cover"}
+          className={cleanPoster || !poster ? "object-cover" : "object-contain"}
           sizes="(max-width: 768px) 100vw, 680px"
           priority
         />
       )}
 
-      {/* Gradient overlays — shown always (darken image or decorate gradient) */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(255,255,255,0.24),transparent_42%),radial-gradient(circle_at_bottom_right,rgba(26,18,8,0.18),transparent_36%)]" />
-      {!form.coverImageUrl && (
+      {/* Decorative overlays — skipped for bare poster thumbnails on listing cards */}
+      {!cleanPoster ? (
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(255,255,255,0.24),transparent_42%),radial-gradient(circle_at_bottom_right,rgba(26,18,8,0.18),transparent_36%)]" />
+      ) : null}
+      {!cleanPoster && !form.coverImageUrl && (
         <div className="absolute inset-0 opacity-10">
           <div className="h-full w-full bg-[linear-gradient(45deg,transparent_25%,rgba(255,255,255,0.9)_25%,rgba(255,255,255,0.9)_27%,transparent_27%,transparent_50%,rgba(255,255,255,0.9)_50%,rgba(255,255,255,0.9)_52%,transparent_52%,transparent_75%,rgba(255,255,255,0.9)_75%,rgba(255,255,255,0.9)_77%,transparent_77%)] bg-[length:48px_48px]" />
         </div>

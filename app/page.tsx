@@ -46,14 +46,14 @@ export default async function Home() {
               activeForms.map((form) => (
                 <Link key={form.id} href={`/forms/${form.id}`} className="block">
                   <Card className="block overflow-hidden rounded-[20px] border-2 border-[color:var(--color-border)] bg-white p-0 shadow-[4px_4px_0_0_var(--border)] transition-all duration-200 hover:shadow-[6px_6px_0_0_var(--border)] hover:translate-y-[-2px] active:shadow-none active:translate-y-[2px]">
-                    <div className="flex flex-col md:grid md:grid-cols-[240px_1fr] items-stretch">
-                      {/* Left: Full Poster (keeps aspect, not cropped) */}
-                      <div className="md:w-[240px] md:pr-0">
+                    <div className="grid grid-cols-1 md:grid-cols-[minmax(140px,38%)_1fr] md:items-stretch">
+                      {/* Left: poster fills column height on desktop, fixed aspect on mobile */}
+                      <div className="relative aspect-[4/5] w-full max-h-[280px] md:aspect-auto md:h-full md:max-h-none md:min-h-[160px]">
                         <FormCover
                           form={form}
                           poster={true}
-                          roundedClass="rounded-t-[18px] md:rounded-l-[18px] md:rounded-tr-none"
-                          className="w-full h-[120px] md:h-[180px]"
+                          roundedClass="rounded-t-[18px] md:rounded-l-[18px] md:rounded-tr-none md:rounded-br-none"
+                          className="absolute inset-0 h-full w-full"
                           showOverlay={false}
                         />
                       </div>

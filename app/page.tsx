@@ -21,7 +21,7 @@ export default async function Home() {
 
   return (
     <main className="relative min-h-screen overflow-hidden px-4 py-12 sm:py-16">
-      <div className="mx-auto flex w-full max-w-[560px] flex-col items-center gap-8">
+      <div className="mx-auto flex w-full max-w-[560px] bg- flex-col items-center gap-8">
 
         {/* Logo & Branding Section - Redesigned as a Premium Neobrutalist Profile Card */}
         <div className="fade-up fade-up-1 w-full overflow-hidden rounded-[28px] border-2 border-black bg-(--color-card) shadow-[6px_6px_0_0_#000] relative">
@@ -38,7 +38,7 @@ export default async function Home() {
               <span className="w-3 h-3 rounded-full border border-black bg-[#27C93F]" />
             </div>
             <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-white z-10">
-              VSM Forms v1.0
+              v1.0
             </div>
           </div>
 
@@ -48,7 +48,7 @@ export default async function Home() {
               <img
                 src="/logo.png"
                 alt="Vivekanand Seva Mandal logo"
-                className="h-full w-full object-contain scale-[1]"
+                className="h-full w-full object-contain scale-[0.9]"
               />
             </div>
 

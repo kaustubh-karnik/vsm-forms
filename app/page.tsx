@@ -46,48 +46,46 @@ export default async function Home() {
               activeForms.map((form) => (
                 <Link key={form.id} href={`/forms/${form.id}`} className="block">
                   <Card className="block overflow-hidden rounded-[20px] border-2 border-[color:var(--color-border)] bg-white p-0 shadow-[4px_4px_0_0_var(--border)] transition-all duration-200 hover:shadow-[6px_6px_0_0_var(--border)] hover:translate-y-[-2px] active:shadow-none active:translate-y-[2px]">
-                    <div className="grid grid-cols-1 md:grid-cols-[minmax(140px,38%)_1fr] md:items-stretch">
-                      {/* Left: poster fills column height on desktop, fixed aspect on mobile */}
-                      <div className="relative aspect-[4/5] w-full max-h-[280px] md:aspect-auto md:h-full md:max-h-none md:min-h-[160px]">
+                    <div className="grid grid-cols-[100px_1fr] sm:grid-cols-[140px_1fr] items-stretch">
+                      {/* Left: poster side-cover, always side-by-side */}
+                      <div className="relative w-full h-full min-h-[120px]">
                         <FormCover
                           form={form}
                           poster={true}
-                          roundedClass="rounded-t-[18px] md:rounded-l-[18px] md:rounded-tr-none md:rounded-br-none"
+                          roundedClass="rounded-l-[18px] rounded-r-none"
                           className="absolute inset-0 h-full w-full"
                           showOverlay={false}
                         />
                       </div>
 
                       {/* Right: Details */}
-                      <div className="flex flex-col gap-3 p-4 md:p-5 justify-between">
+                      <div className="flex flex-col justify-between p-3 sm:p-4 gap-2.5 h-full min-w-0">
                         <div className="space-y-1">
-                          <Text as="h2" className="text-lg font-semibold leading-tight text-[color:var(--color-dark)]">
+                          <Text as="h2" className="text-sm sm:text-base font-bold leading-tight text-[color:var(--color-dark)] line-clamp-1 sm:line-clamp-2">
                             {form.title}
                           </Text>
-                          <Text as="p" className="line-clamp-3 text-sm text-[color:var(--color-dark)]">
+                          <Text as="p" className="text-xs sm:text-sm text-[color:var(--color-dark)]/80 line-clamp-2 leading-snug">
                             {form.description}
                           </Text>
                         </div>
 
-                        {/* Team Badge & Deadline */}
-                        <div className="flex items-center justify-between gap-2">
-                          <TeamBadge team={form.team} />
-                          {form.closingDate && getDeadlineState(form.closingDate) && (
-                            <DeadlinePill deadline={getDeadlineState(form.closingDate)!} />
-                          )}
-                        </div>
+                        {/* Badges & Action Button in one compact row */}
+                        <div className="flex items-center justify-between gap-2 mt-auto">
+                          <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 min-w-0">
+                            {form.closingDate && getDeadlineState(form.closingDate) && (
+                              <DeadlinePill deadline={getDeadlineState(form.closingDate)!} />
+                            )}
+                          </div>
 
-                        {/* CTA Button */}
-                        <div className="mt-3 md:mt-2">
                           <Button
                             variant="default"
-                            size="md"
-                            className="w-full justify-between"
+                            size="sm"
+                            className="shrink-0 h-8 px-2.5 sm:px-3.5 text-xs font-bold border-2 border-black bg-primary text-white shadow-[2px_2px_0_0_#000] hover:shadow-[1px_1px_0_0_#000] hover:translate-y-[1px] active:translate-y-[2px] active:shadow-none transition-all"
                             asChild
                           >
                             <span>
-                              Register Now
-                              <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                              Register
+                              <svg className="h-3.5 w-3.5 ml-1 stroke-[2.5px]" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                                 <polyline points="9 18 15 12 9 6" />
                               </svg>
                             </span>

@@ -201,15 +201,14 @@ export function TeamBadge({ team }: { team: Team }) {
 
   return (
     <span
-      className="inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-semibold"
+      className="inline-flex items-center gap-1.5 rounded-sm border-2 border-[#1A1208] px-2 py-0.5 text-[10px] sm:text-xs font-bold uppercase tracking-wider shadow-[2px_2px_0_0_#1A1208]"
       style={{
         backgroundColor: tone.bg,
-        borderColor: tone.border,
-        color: tone.text,
+        color: "#1A1208",
       }}
     >
       <span
-        className="h-2.5 w-2.5 rounded-full"
+        className="h-1.5 w-1.5 rounded-none border border-[#1A1208]"
         style={{ backgroundColor: TEAM_DOTS[team] }}
         aria-hidden
       />
@@ -220,26 +219,30 @@ export function TeamBadge({ team }: { team: Team }) {
 
 export function DeadlinePill({ deadline }: { deadline: DeadlineState }) {
   const styles: Record<DeadlineTone, string> = {
-    safe: "bg-[color:rgba(21,128,61,0.12)] text-[color:#166534]",
-    soon: "bg-[color:rgba(217,119,6,0.12)] text-[color:#9A5B00]",
-    urgent: "bg-[color:rgba(220,38,38,0.1)] text-[color:#B91C1C]",
-    closed: "bg-[color:rgba(107,91,69,0.1)] text-[color:var(--color-muted)]",
+    safe: "text-[#166534] bg-[#DCFCE7]/60 border-[#15803D]/20",
+    soon: "text-[#9A5B00] bg-[#FEF3C7]/60 border-[#D97706]/20",
+    urgent: "text-[#B91C1C] bg-[#FEE2E2]/60 border-[#DC2626]/20",
+    closed: "text-[#6B5B45] bg-[#F3E8D9]/60 border-[#6B5B45]/20",
   };
 
-  const dotClass =
+  const dotColor =
     deadline.tone === "urgent"
-      ? "bg-[color:#DC2626] pulse-red"
+      ? "#DC2626"
       : deadline.tone === "safe"
-        ? "bg-[color:#15803D]"
+        ? "#15803D"
         : deadline.tone === "soon"
-          ? "bg-[color:#D97706]"
-          : "bg-[color:#6B5B45]";
+          ? "#D97706"
+          : "#6B5B45";
 
   return (
     <div
-      className={`inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-semibold ${styles[deadline.tone]}`}
+      className={`inline-flex items-center gap-1.5 rounded px-1.5 py-0.5 text-[10px] sm:text-[11px] font-medium border border-dashed ${styles[deadline.tone]}`}
     >
-      <span className={`h-2 w-2 rounded-full ${dotClass}`} aria-hidden />
+      <span
+        className="h-1.5 w-1.5 rounded-full"
+        style={{ backgroundColor: dotColor }}
+        aria-hidden
+      />
       {deadline.label}
     </div>
   );

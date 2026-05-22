@@ -23,7 +23,7 @@ import type { FormField } from "@/lib/supabase";
 
 function HelpText({ text }: { text?: string }) {
   if (!text) return null;
-  return <p className="mt-1 text-xs leading-5 text-muted">{text}</p>;
+  return <p className="mt-1 text-xs leading-5 text-muted-foreground">{text}</p>;
 }
 
 function FieldLabel({ field }: { field: FormField }) {
@@ -120,7 +120,7 @@ function FormFieldInput({ field }: { field: FormField }) {
           <span>
             {field.label}
             {field.required ? <span className="ml-1 text-saffron">*</span> : null}
-            {field.helpText ? <span className="mt-0.5 block text-xs text-muted">{field.helpText}</span> : null}
+            {field.helpText ? <span className="mt-0.5 block text-xs text-muted-foreground">{field.helpText}</span> : null}
           </span>
         </Label>
       </>
@@ -144,7 +144,7 @@ function FormFieldInput({ field }: { field: FormField }) {
             {steps.map((n) => (
               <Label
                 key={n}
-                className="group flex shrink-0 cursor-pointer flex-col items-center gap-1.5 rounded-[14px] border-2 border-border bg-white px-3 py-3 text-sm font-semibold text-muted shadow-[3px_3px_0_0_var(--border)] transition-all has-checked:translate-x-px has-checked:translate-y-px has-checked:border-saffron has-checked:bg-[rgba(232,100,10,0.06)] has-checked:text-saffron"
+                className="group flex shrink-0 cursor-pointer flex-col items-center gap-1.5 rounded-[14px] border-2 border-border bg-white px-3 py-3 text-sm font-semibold text-muted-foreground shadow-[3px_3px_0_0_var(--border)] transition-all has-checked:translate-x-px has-checked:translate-y-px has-checked:border-saffron has-checked:bg-[rgba(232,100,10,0.06)] has-checked:text-saffron"
               >
                 <input type="radio" name={field.label} value={String(n)} required={field.required} className="sr-only" />
                 <span className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-current bg-white text-sm transition-all group-has-checked:bg-saffron group-has-checked:text-white">
@@ -155,8 +155,8 @@ function FormFieldInput({ field }: { field: FormField }) {
           </div>
           {(field.scaleMinLabel || field.scaleMaxLabel) && (
             <div className="flex justify-between px-1">
-              <span className="text-xs text-muted">{field.scaleMinLabel}</span>
-              <span className="text-xs text-muted">{field.scaleMaxLabel}</span>
+              <span className="text-xs text-muted-foreground">{field.scaleMinLabel}</span>
+              <span className="text-xs text-muted-foreground">{field.scaleMaxLabel}</span>
             </div>
           )}
         </div>
@@ -231,7 +231,7 @@ export default async function FormPage({
       <div className="mx-auto flex w-full max-w-190 flex-col gap-5">
         <Link
           href="/"
-          className="fade-up fade-up-1 inline-flex w-fit items-center gap-2 rounded-full border-2 border-border bg-(--color-card) px-4 py-2 text-sm font-medium text-muted shadow-[3px_3px_0_0_var(--border)] transition-all hover:-translate-y-px hover:text-saffron"
+          className="fade-up fade-up-1 inline-flex w-fit items-center gap-2 rounded-full border-2 border-border bg-(--color-card) px-4 py-2 text-sm font-semibold text-muted-foreground shadow-[3px_3px_0_0_var(--border)] transition-all hover:-translate-y-[2px] hover:shadow-[4px_4px_0_0_var(--border)] active:translate-y-[2px] active:shadow-none hover:text-saffron"
         >
           <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" className="h-3.5 w-3.5" aria-hidden>
             <path d="M10 12L6 8l4-4" strokeLinecap="round" strokeLinejoin="round" />
@@ -244,26 +244,70 @@ export default async function FormPage({
         </Link>
 
         <Card className="fade-up fade-up-2 block overflow-hidden rounded-[28px] border-2 border-border bg-(--color-card) shadow-[6px_6px_0_0_var(--border)]">
-          <FormCover form={form} tall />
+          {form.coverImageUrl ? (
+            <div className="p-5 sm:p-6 lg:p-8 pb-0 sm:pb-0 lg:pb-0">
+              <div className="grid grid-cols-1 md:grid-cols-[minmax(300px,40%)_1fr] gap-6 lg:gap-8 items-center">
+                {/* Left side: Poster flyer */}
+                <div className="flex justify-center w-full">
+                  <div className="relative w-full max-w-[340px] aspect-[3/4.2] overflow-hidden rounded-[20px] border-2 border-border bg-white shadow-[4px_4px_0_0_var(--border)]">
+                    <img
+                      src={form.coverImageUrl}
+                      alt={`${form.title} poster`}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                </div>
+
+                {/* Right side: Details */}
+                <div className="space-y-5 lg:space-y-6 flex flex-col justify-center">
+                  <header className="space-y-3">
+                    <Text as="h1" className="text-2xl sm:text-[32px] font-bold leading-tight text-dark">
+                      {form.title}
+                    </Text>
+                    <div className="flex flex-wrap items-center gap-3">
+                      <TeamBadge team={form.team} />
+                      {deadline ? <DeadlinePill deadline={deadline} /> : null}
+                    </div>
+                  </header>
+
+                  <section className="space-y-2">
+                    <p className="text-xs font-bold uppercase tracking-[0.16em] text-muted-foreground">
+                      About this initiative
+                    </p>
+                    <p className="text-sm sm:text-base leading-7 text-[color:var(--color-dark)]/80">
+                      {form.description}
+                    </p>
+                  </section>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <>
+              <FormCover form={form} tall />
+              <div className="px-5 pt-6 sm:px-6 lg:px-8 space-y-5 lg:space-y-6">
+                <header className="space-y-3">
+                  <Text as="h1" className="text-2xl sm:text-[32px] font-bold leading-tight text-dark">
+                    {form.title}
+                  </Text>
+                  <div className="flex flex-wrap items-center gap-3">
+                    <TeamBadge team={form.team} />
+                    {deadline ? <DeadlinePill deadline={deadline} /> : null}
+                  </div>
+                </header>
+
+                <section className="space-y-2">
+                  <p className="text-xs font-bold uppercase tracking-[0.16em] text-muted-foreground">
+                    About this initiative
+                  </p>
+                  <p className="text-sm sm:text-base leading-7 text-[color:var(--color-dark)]/80">
+                    {form.description}
+                  </p>
+                </section>
+              </div>
+            </>
+          )}
 
           <div className="space-y-6 p-5 sm:p-6 lg:p-8">
-            <header className="space-y-3">
-              <Text as="h1" className="text-[28px] leading-tight text-dark">
-                {form.title}
-              </Text>
-              <div className="flex flex-wrap items-center gap-3">
-                <TeamBadge team={form.team} />
-                {deadline ? <DeadlinePill deadline={deadline} /> : null}
-              </div>
-            </header>
-
-            <section className="space-y-2">
-              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-muted">
-                About this initiative
-              </p>
-              <p className="text-sm leading-7 text-muted">{form.description}</p>
-            </section>
-
             <SectionDivider label="Registration Form" />
 
             {isClosed ? (

@@ -47,7 +47,7 @@ function FormFieldInput({ field }: { field: FormField }) {
           id={field.id}
           name={field.label}
           required={field.required}
-          placeholder={field.placeholder ?? ""}
+          placeholder={field.placeholder ?? "Your Answer"}
           className="mt-2 min-h-30 resize-y"
           minLength={validation?.minLength}
           maxLength={validation?.maxLength}
@@ -68,7 +68,7 @@ function FormFieldInput({ field }: { field: FormField }) {
           className="mt-2 w-full rounded-xl border-2 border-border bg-white px-4 py-3 shadow-[3px_3px_0_0_var(--border)]"
           defaultValue=""
         >
-          <option value="">{field.placeholder ?? `Select ${field.label}`}</option>
+          <option value="">{field.placeholder ?? "Your Answer"}</option>
           {field.options?.map((option) => (
             <option key={option} value={option}>
               {option}
@@ -196,7 +196,7 @@ function FormFieldInput({ field }: { field: FormField }) {
         name={field.label}
         type={inputType}
         required={field.required}
-        placeholder={field.placeholder ?? ""}
+        placeholder={field.placeholder ?? "Your Answer"}
         minLength={validation?.minLength}
         maxLength={validation?.maxLength}
         min={validation?.min}
@@ -274,7 +274,7 @@ export default async function FormPage({
                     <p className="text-xs font-bold uppercase tracking-[0.16em] text-muted-foreground">
                       About this initiative
                     </p>
-                    <p className="text-sm sm:text-base leading-7 text-[color:var(--color-dark)]/80">
+                    <p className="text-sm sm:text-base leading-7 text-[color:var(--color-dark)]/80 whitespace-pre-wrap">
                       {form.description}
                     </p>
                   </section>
@@ -299,7 +299,7 @@ export default async function FormPage({
                   <p className="text-xs font-bold uppercase tracking-[0.16em] text-muted-foreground">
                     About this initiative
                   </p>
-                  <p className="text-sm sm:text-base leading-7 text-[color:var(--color-dark)]/80">
+                  <p className="text-sm sm:text-base leading-7 text-[color:var(--color-dark)]/80 whitespace-pre-wrap">
                     {form.description}
                   </p>
                 </section>

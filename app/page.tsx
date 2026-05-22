@@ -121,11 +121,11 @@ export default async function Home() {
                             className="shrink-0 h-8 px-2.5 sm:px-3.5 text-xs font-bold border-2 border-black bg-primary text-white shadow-[2px_2px_0_0_#000] hover:shadow-[1px_1px_0_0_#000] hover:translate-y-[1px] active:translate-y-[2px] active:shadow-none transition-all"
                             asChild
                           >
-                            <span>
-                              Register
-                              <svg className="h-3.5 w-3.5 ml-1 stroke-[2.5px]" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <span className="inline-flex items-center gap-1 leading-none">
+                              <span className="leading-none">Register</span>
+                              {/* <svg className="block h-3.5 w-3.5 stroke-[2.5px]" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                                 <polyline points="9 18 15 12 9 6" />
-                              </svg>
+                              </svg> */}
                             </span>
                           </Button>
                         </div>

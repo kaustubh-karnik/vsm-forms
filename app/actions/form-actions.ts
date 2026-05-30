@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 
 import { supabase } from "@/lib/supabase";
+import { supabaseAdmin } from "@/lib/supabase-server";
 import type { FormField, FormSettings, FormStatus, Team } from "@/lib/supabase";
 
 export interface FormPayload {
@@ -75,17 +76,38 @@ export async function uploadBannerImage(
 ): Promise<string> {
   const file = formData.get("file") as File;
   if (!file || file.size === 0) throw new Error("No file provided");
+  const previousUrlRaw = formData.get("previousUrl");
+  const previousUrl = typeof previousUrlRaw === "string" ? previousUrlRaw : undefined;
 
   const ext = file.name.split(".").pop() ?? "jpg";
-  const path = `${formId}/banner.${ext}`;
+  const uniqueId = `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+  const path = `${formId}/banner-${uniqueId}.${ext}`;
 
   const bytes = await file.arrayBuffer();
   const { error } = await supabase.storage
     .from("form-banners")
-    .upload(path, bytes, { contentType: file.type, upsert: true });
+    .upload(path, bytes, { contentType: file.type, upsert: false });
 
   if (error) throw new Error(error.message);
 
   const { data } = supabase.storage.from("form-banners").getPublicUrl(path);
+  if (previousUrl && previousUrl !== data.publicUrl) {
+    const marker = "/storage/v1/object/public/";
+    try {
+      const parsed = new URL(previousUrl);
+      const markerIndex = parsed.pathname.indexOf(marker);
+      if (markerIndex !== -1) {
+        const rest = parsed.pathname.slice(markerIndex + marker.length);
+        const [bucket, ...pathParts] = rest.split("/");
+        if (bucket === "form-banners" && pathParts.length > 0) {
+          await supabaseAdmin.storage
+            .from("form-banners")
+            .remove([pathParts.join("/")]);
+        }
+      }
+    } catch {
+      // ignore cleanup errors to avoid failing uploads
+    }
+  }
   return data.publicUrl;
 }

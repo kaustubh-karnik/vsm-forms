@@ -452,6 +452,9 @@ function BannerUploader({
     try {
       const fd = new FormData();
       fd.append("file", file);
+      if (coverImageUrl) {
+        fd.append("previousUrl", coverImageUrl);
+      }
       const url = await uploadBannerImage(formId, fd);
       onImageUploaded(url);
     } catch (e) {

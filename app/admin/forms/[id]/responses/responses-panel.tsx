@@ -40,7 +40,7 @@ export function ResponsesPanel({
   }, [responses, searchQuery]);
 
   return (
-    <div className="space-y-6">
+    <div className="min-w-0 space-y-6">
       <div className="grid gap-4 rounded-[16px] border-2 border-black bg-[color:var(--color-card)] p-4 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end shadow-[4px_4px_0_0_#000]">
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-[minmax(0,1fr)_auto]">
           <label className="space-y-1 text-sm">
@@ -56,7 +56,7 @@ export function ResponsesPanel({
             />
           </label>
         </div>
-        <div className="flex flex-wrap items-center justify-start gap-3 lg:justify-end">
+        <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:flex lg:justify-end lg:gap-3">
           <button
             type="button"
             disabled={filteredResponses.length === 0 || isExporting}
@@ -65,7 +65,7 @@ export function ResponsesPanel({
                 await exportResponsesToExcel(form, filteredResponses);
               });
             }}
-            className="rounded-[10px] border-2 border-black bg-[color:var(--color-cream)] px-4 py-2 text-sm font-bold text-[color:var(--color-dark)] shadow-[2px_2px_0_0_#000] transition-all hover:-translate-y-px hover:shadow-[3px_3px_0_0_#000] active:translate-y-0 active:shadow-none hover:text-[color:var(--color-saffron)] disabled:cursor-not-allowed disabled:opacity-60"
+            className="w-full rounded-[10px] border-2 border-black bg-[color:var(--color-cream)] px-4 py-2.5 text-sm font-bold text-[color:var(--color-dark)] shadow-[2px_2px_0_0_#000] transition-all hover:-translate-y-px hover:shadow-[3px_3px_0_0_#000] active:translate-y-0 active:shadow-none hover:text-[color:var(--color-saffron)] disabled:cursor-not-allowed disabled:opacity-60 lg:w-auto"
           >
             Export Excel
           </button>
@@ -77,7 +77,7 @@ export function ResponsesPanel({
                 await exportResponsesToPdf(form, filteredResponses);
               });
             }}
-            className="rounded-[10px] border-2 border-black bg-[color:var(--color-cream)] px-4 py-2 text-sm font-bold text-[color:var(--color-dark)] shadow-[2px_2px_0_0_#000] transition-all hover:-translate-y-px hover:shadow-[3px_3px_0_0_#000] active:translate-y-0 active:shadow-none hover:text-[color:var(--color-saffron)] disabled:cursor-not-allowed disabled:opacity-60"
+            className="w-full rounded-[10px] border-2 border-black bg-[color:var(--color-cream)] px-4 py-2.5 text-sm font-bold text-[color:var(--color-dark)] shadow-[2px_2px_0_0_#000] transition-all hover:-translate-y-px hover:shadow-[3px_3px_0_0_#000] active:translate-y-0 active:shadow-none hover:text-[color:var(--color-saffron)] disabled:cursor-not-allowed disabled:opacity-60 lg:w-auto"
           >
             Export PDF
           </button>

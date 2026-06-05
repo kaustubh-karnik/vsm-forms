@@ -758,50 +758,71 @@ export function FormBuilder({ form }: { form: VSMForm }) {
   }
 
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="flex min-h-screen min-w-0 flex-col overflow-x-hidden">
       {/* sticky top bar */}
-      <header className="sticky top-0 z-30 border-b-2 border-black bg-[color:var(--color-cream)]/95 backdrop-blur-sm">
-        <div className="flex items-center gap-3 px-4 py-3 sm:px-6">
-          <Link href="/admin/forms"
-            className="shrink-0 rounded-lg border-2 border-black p-2 bg-[color:var(--color-card)] text-[color:var(--color-dark)] shadow-[2px_2px_0_0_#000] transition-all hover:bg-[color:var(--color-cream)] hover:shadow-[3px_3px_0_0_#000] hover:-translate-x-[1px] hover:-translate-y-[1px] active:translate-x-0 active:translate-y-0 active:shadow-none"
-            aria-label="Back to forms">
-            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2.5" className="h-4 w-4" aria-hidden>
-              <path d="M10 12L6 8l4-4" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </Link>
-          <input value={title} onChange={(e) => { setTitle(e.target.value); markDirty(); }}
-            className="min-w-0 flex-1 rounded-lg border-2 border-transparent bg-transparent px-2 py-1.5 font-serif text-lg font-bold text-[color:var(--color-dark)] outline-none transition-all hover:border-black focus:border-[color:var(--color-saffron)] focus:bg-[color:var(--color-card)] focus:shadow-[2px_2px_0_0_#000]"
-            placeholder="Form title…" />
-          <select value={team} onChange={(e) => handleTeamChange(e.target.value as Team)} className="vsm-input w-auto min-w-[130px] py-2 text-sm bg-[color:var(--color-cream)] border-2 border-black shadow-[2px_2px_0_0_#000] focus:shadow-none focus:translate-x-[1px] focus:translate-y-[1px] transition-all cursor-pointer">
-            {TEAMS.map((t) => <option key={t} value={t}>{t}</option>)}
-          </select>
-          <select value={status} onChange={(e) => { setStatus(e.target.value as FormStatus); markDirty(); }} className="vsm-input w-auto min-w-[110px] py-2 text-sm bg-[color:var(--color-cream)] border-2 border-black shadow-[2px_2px_0_0_#000] focus:shadow-none focus:translate-x-[1px] focus:translate-y-[1px] transition-all cursor-pointer">
-            <option value="draft">Draft</option>
-            <option value="active">Published</option>
-            <option value="closed">Closed</option>
-          </select>
-          {saveState === "saved" && (
-            <span className="hidden shrink-0 items-center gap-1.5 text-sm font-bold text-[color:#15803D] sm:flex">
+      <header className="sticky top-0 z-30 min-w-0 border-b-2 border-black bg-[color:var(--color-cream)]/95 backdrop-blur-sm">
+        <div className="flex flex-col gap-3 px-4 py-3 sm:px-6 lg:flex-row lg:items-center lg:gap-3">
+          <div className="flex min-w-0 flex-1 items-center gap-3">
+            <Link href="/admin/forms"
+              className="shrink-0 rounded-lg border-2 border-black p-2 bg-[color:var(--color-card)] text-[color:var(--color-dark)] shadow-[2px_2px_0_0_#000] transition-all hover:bg-[color:var(--color-cream)] hover:shadow-[3px_3px_0_0_#000] hover:-translate-x-[1px] hover:-translate-y-[1px] active:translate-x-0 active:translate-y-0 active:shadow-none"
+              aria-label="Back to forms">
               <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2.5" className="h-4 w-4" aria-hidden>
-                <path d="M2 8l4 4 8-8" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="M10 12L6 8l4-4" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
-              Saved
-            </span>
-          )}
-          {saveState === "error" && <span className="hidden shrink-0 text-sm font-bold text-red-600 sm:block">Error saving</span>}
-          <button type="button" onClick={handleSave} disabled={isPending}
-            className="shrink-0 inline-flex items-center gap-2 rounded-lg border-2 border-black bg-[color:var(--color-saffron)] px-4 py-2 text-sm font-bold text-white shadow-[3px_3px_0_0_#000] transition-all hover:bg-[color:var(--color-saffron-dark)] hover:-translate-x-[1px] hover:-translate-y-[1px] hover:shadow-[4px_4px_0_0_#000] active:translate-x-0 active:translate-y-0 active:shadow-none disabled:opacity-60 disabled:pointer-events-none">
-            {isPending ? (
-              <><svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none" aria-hidden>
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="white" strokeWidth="3" />
-                <path className="opacity-80" fill="white" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-              </svg>Saving…</>
-            ) : (
-              <><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2.5" className="h-4 w-4" aria-hidden>
-                <path d="M13 5l-6 6-3-3" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>Save</>
+            </Link>
+            <input value={title} onChange={(e) => { setTitle(e.target.value); markDirty(); }}
+              className="min-w-0 flex-1 rounded-lg border-2 border-transparent bg-transparent px-2 py-1.5 font-serif text-lg font-bold text-[color:var(--color-dark)] outline-none transition-all hover:border-black focus:border-[color:var(--color-saffron)] focus:bg-[color:var(--color-card)] focus:shadow-[2px_2px_0_0_#000]"
+              placeholder="Form title…" />
+          </div>
+
+          <div className="grid min-w-0 grid-cols-2 gap-2 sm:flex sm:flex-wrap sm:items-center lg:flex-nowrap lg:gap-3">
+            <select
+              value={team}
+              onChange={(e) => handleTeamChange(e.target.value as Team)}
+              className="vsm-input col-span-1 min-w-0 w-full py-2 text-sm bg-[color:var(--color-cream)] border-2 border-black shadow-[2px_2px_0_0_#000] focus:shadow-none focus:translate-x-[1px] focus:translate-y-[1px] transition-all cursor-pointer sm:w-auto sm:min-w-[130px]"
+            >
+              {TEAMS.map((t) => <option key={t} value={t}>{t}</option>)}
+            </select>
+            <select
+              value={status}
+              onChange={(e) => { setStatus(e.target.value as FormStatus); markDirty(); }}
+              className="vsm-input col-span-1 min-w-0 w-full py-2 text-sm bg-[color:var(--color-cream)] border-2 border-black shadow-[2px_2px_0_0_#000] focus:shadow-none focus:translate-x-[1px] focus:translate-y-[1px] transition-all cursor-pointer sm:w-auto sm:min-w-[110px]"
+            >
+              <option value="draft">Draft</option>
+              <option value="active">Published</option>
+              <option value="closed">Closed</option>
+            </select>
+            {saveState === "saved" && (
+              <span className="col-span-2 inline-flex items-center justify-center gap-1.5 text-sm font-bold text-[color:#15803D] sm:col-span-1 sm:justify-start">
+                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2.5" className="h-4 w-4" aria-hidden>
+                  <path d="M2 8l4 4 8-8" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+                Saved
+              </span>
             )}
-          </button>
+            {saveState === "error" && (
+              <span className="col-span-2 text-center text-sm font-bold text-red-600 sm:col-span-1 sm:text-left">
+                Error saving
+              </span>
+            )}
+            <button
+              type="button"
+              onClick={handleSave}
+              disabled={isPending}
+              className="col-span-2 inline-flex w-full items-center justify-center gap-2 rounded-lg border-2 border-black bg-[color:var(--color-saffron)] px-4 py-2.5 text-sm font-bold text-white shadow-[3px_3px_0_0_#000] transition-all hover:bg-[color:var(--color-saffron-dark)] hover:-translate-x-[1px] hover:-translate-y-[1px] hover:shadow-[4px_4px_0_0_#000] active:translate-x-0 active:translate-y-0 active:shadow-none disabled:opacity-60 disabled:pointer-events-none sm:col-span-1 sm:w-auto lg:shrink-0"
+            >
+              {isPending ? (
+                <><svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none" aria-hidden>
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="white" strokeWidth="3" />
+                  <path className="opacity-80" fill="white" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                </svg>Saving…</>
+              ) : (
+                <><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2.5" className="h-4 w-4" aria-hidden>
+                  <path d="M13 5l-6 6-3-3" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>Save</>
+              )}
+            </button>
+          </div>
         </div>
       </header>
 

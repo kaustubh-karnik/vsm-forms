@@ -3,8 +3,8 @@
 import React, { useEffect, useMemo, useState, useTransition } from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 
-import { getFieldValue } from "@/lib/response-data";
-import type { VSMForm, FormResponse } from "@/lib/supabase";
+import { getFieldValue, keysAreSimilar } from "@/lib/response-data";
+import type { FormField, VSMForm, FormResponse } from "@/lib/supabase";
 import { deleteResponses } from "@/app/actions/response-actions";
 
 function formatDate(date: string) {
@@ -55,6 +55,56 @@ function renderValue(value: unknown) {
   return String(value);
 }
 
+function dataKeyMatchesField(key: string, field: FormField): boolean {
+  return key === field.label || key === field.id || keysAreSimilar(key, field.label);
+}
+
+function getDetailItems(data: Record<string, unknown>, fields: FormField[]) {
+  const items = fields.map((field) => ({
+    label: field.label,
+    value: getFieldValue(data, field),
+  }));
+
+  for (const [key, value] of Object.entries(data)) {
+    if (!fields.some((field) => dataKeyMatchesField(key, field))) {
+      items.push({ label: key, value });
+    }
+  }
+
+  return items;
+}
+
+function DetailValue({ label, value }: { label: string; value: unknown }) {
+  if (isUrl(value)) {
+    return (
+      <div className="space-y-2">
+        {isImageUrl(value) && (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={value}
+            alt={label}
+            className="h-auto max-h-40 w-full rounded-[8px] border border-[color:var(--color-border)] object-cover md:max-h-48"
+          />
+        )}
+        <a
+          href={value}
+          target="_blank"
+          rel="noreferrer"
+          className="inline-flex items-center gap-1 text-sm text-[color:var(--color-saffron)] underline-offset-2 hover:underline"
+        >
+          Open file
+        </a>
+      </div>
+    );
+  }
+
+  return (
+    <span className="break-words text-sm leading-6 text-[color:var(--color-dark)] md:text-sm">
+      {renderValue(value)}
+    </span>
+  );
+}
+
 export function ResponseViewer({
   form,
   responses,
@@ -70,6 +120,10 @@ export function ResponseViewer({
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const selectedId = searchParams.get("r") ?? responses[0]?.id;
   const selected = responses.find((r) => r.id === selectedId) ?? responses[0];
+  const detailItems = useMemo(
+    () => (selected ? getDetailItems(selected.data, form.fields) : []),
+    [selected, form.fields]
+  );
 
   function selectRow(id: string) {
     const params = new URLSearchParams(searchParams.toString());
@@ -78,6 +132,17 @@ export function ResponseViewer({
   }
 
   const columns = form.fields;
+  const extraColumnKeys = useMemo(() => {
+    const keys = new Set<string>();
+    responses.forEach((response) => {
+      Object.keys(response.data).forEach((key) => {
+        if (!form.fields.some((field) => dataKeyMatchesField(key, field))) {
+          keys.add(key);
+        }
+      });
+    });
+    return [...keys].sort((a, b) => a.localeCompare(b));
+  }, [responses, form.fields]);
   const responseIds = useMemo(() => responses.map((response) => response.id), [responses]);
   const allSelected = responseIds.length > 0 && selectedIds.length === responseIds.length;
   const selectedCount = selectedIds.length;
@@ -106,8 +171,8 @@ export function ResponseViewer({
   }
 
   return (
-    <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_360px]">
-      <section className="space-y-4">
+    <div className="grid min-w-0 gap-6 xl:grid-cols-[minmax(0,1fr)_360px]">
+      <section className="min-w-0 space-y-4">
         <div className="flex flex-wrap items-center justify-between gap-3 rounded-[12px] border-2 border-black bg-[color:var(--color-card)] px-4 py-3 shadow-[3px_3px_0_0_#000]">
           <div className="text-sm text-[color:var(--color-muted)]">
             {selectedCount > 0 ? (
@@ -136,155 +201,139 @@ export function ResponseViewer({
           </div>
         </div>
 
-        <div className="rounded-[16px] border-2 border-black bg-[color:var(--color-card)] shadow-[4px_4px_0_0_#000] overflow-hidden">
-          <div className="border-b-2 border-black px-4 py-3 text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--color-muted)] md:hidden">
-            Responses
-          </div>
-          <div className="space-y-3 p-4 md:hidden">
-            {responses.map((response) => {
-              const isSelected = response.id === selectedId;
-              return (
-                <button
-                  key={response.id}
-                  type="button"
-                  onClick={() => selectRow(response.id)}
-                  className={`w-full rounded-[12px] border-2 px-4 py-3 text-left transition-all ${
-                     isSelected
-                       ? "border-black bg-[color:var(--color-accent)] shadow-[2px_2px_0_0_#000]"
-                       : "border-black bg-[color:var(--color-card)] hover:bg-[color:var(--color-cream)]/50 shadow-[2px_2px_0_0_#000] hover:-translate-y-px hover:shadow-[3px_3px_0_0_#000] active:translate-y-0 active:shadow-none"
-                   }`}
-                >
-                  <div className="flex items-start justify-between gap-3">
-                    <div>
-                      <p className="text-sm font-semibold text-[color:var(--color-dark)]">
-                        {renderValue(getFieldValue(response.data, columns[0]))}
-                      </p>
-                      <p className="mt-1 text-xs text-[color:var(--color-muted)]">
-                        {formatShortDate(response.submittedAt)}
-                      </p>
-                    </div>
-                    <input
-                      type="checkbox"
-                      checked={selectedIds.includes(response.id)}
-                      onChange={(event) => {
-                        const checked = event.target.checked;
-                        setSelectedIds((prev) =>
-                          checked
-                            ? [...prev, response.id]
-                            : prev.filter((id) => id !== response.id)
-                        );
-                      }}
-                      onClick={(event) => event.stopPropagation()}
-                      className="mt-1 h-4.5 w-4.5 accent-[color:var(--color-saffron)] rounded-none border-2 border-black shadow-[1px_1px_0_0_#000] cursor-pointer"
-                    />
-                  </div>
-                  <div className="mt-3 grid gap-1 text-xs text-[color:var(--color-muted)]">
-                    {columns.slice(1, 3).map((field) => (
-                      <div key={field.id} className="flex items-center justify-between gap-2">
-                        <span className="font-semibold uppercase tracking-[0.16em] text-[10px] text-[color:var(--color-muted)]">
-                          {field.label}
-                        </span>
-                        <span className="max-w-[60%] truncate text-right">
-                          {renderValue(getFieldValue(response.data, field))}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </button>
-              );
-            })}
+        <div className="w-full min-w-0 overflow-hidden rounded-[16px] border-2 border-black bg-[color:var(--color-card)] shadow-[4px_4px_0_0_#000]">
+          <div className="flex items-center justify-between gap-3 border-b-2 border-black bg-[color:var(--color-cream)] px-4 py-3 md:hidden">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--color-muted)]">
+                Spreadsheet view
+              </p>
+              <p className="mt-0.5 text-[11px] font-medium text-[color:var(--color-dark)]">
+                Swipe sideways to see all columns →
+              </p>
+            </div>
+            <span className="shrink-0 rounded-full border border-black bg-white px-2.5 py-0.5 text-[11px] font-bold text-[color:var(--color-dark)]">
+              {responses.length}
+            </span>
           </div>
 
-          <div className="hidden md:block">
-            <div className="overflow-x-auto">
-              <table className="min-w-[720px] border-collapse">
-                <thead>
-                  <tr className="bg-[color:var(--color-cream)] border-b-2 border-black text-left">
-                    <th className="px-4 py-3 text-[10px] font-semibold uppercase tracking-[0.18em] text-[color:var(--color-muted)]">
-                      <label className="inline-flex items-center gap-2">
+          <div className="w-full min-w-0 max-w-full max-h-[min(72dvh,720px)] overflow-x-auto overflow-y-auto overscroll-contain [touch-action:pan-x_pan-y] [-webkit-overflow-scrolling:touch] md:max-h-none">
+            <table className="w-max min-w-full border-collapse">
+              <thead>
+                <tr className="border-b-2 border-black bg-[color:var(--color-cream)] text-left">
+                  <th className="min-w-[52px] bg-[color:var(--color-cream)] px-3 py-3 text-[10px] font-semibold uppercase tracking-[0.18em] text-[color:var(--color-muted)] md:px-4">
+                    <label className="inline-flex items-center gap-2">
+                      <input
+                        type="checkbox"
+                        checked={allSelected}
+                        onChange={() => {
+                          setSelectedIds(allSelected ? [] : responseIds);
+                        }}
+                        className="h-4 w-4 rounded border-[color:var(--color-border)] text-[color:var(--color-saffron)]"
+                      />
+                      <span className="hidden sm:inline">Select</span>
+                    </label>
+                  </th>
+                  <th className="min-w-[108px] bg-[color:var(--color-cream)] px-3 py-3 text-[10px] font-semibold uppercase tracking-[0.18em] text-[color:var(--color-muted)] md:px-4">
+                    Submitted
+                  </th>
+                  {columns.map((field) => (
+                    <th
+                      key={field.id}
+                      className="min-w-[140px] max-w-[220px] bg-[color:var(--color-cream)] px-3 py-3 text-[10px] font-semibold uppercase tracking-[0.18em] text-[color:var(--color-muted)] md:min-w-0 md:max-w-none md:px-4"
+                    >
+                      {field.label}
+                    </th>
+                  ))}
+                  {extraColumnKeys.map((key) => (
+                    <th
+                      key={key}
+                      className="min-w-[140px] max-w-[220px] bg-[color:var(--color-cream)] px-3 py-3 text-[10px] font-semibold uppercase tracking-[0.18em] text-[color:var(--color-muted)] md:min-w-0 md:max-w-none md:px-4"
+                    >
+                      {key}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {responses.map((response) => {
+                  const isRowSelected = response.id === selectedId;
+                  const rowBg = isRowSelected
+                    ? "bg-[color:var(--color-accent)]"
+                    : "bg-[color:var(--color-card)]";
+
+                  return (
+                    <tr
+                      key={response.id}
+                      onClick={() => selectRow(response.id)}
+                      aria-selected={isRowSelected}
+                      className={`cursor-pointer border-t-2 border-black align-top transition-colors hover:bg-[color:var(--color-cream)]/50 ${rowBg}`}
+                    >
+                      <td className={`min-w-[52px] px-3 py-3 md:px-4 ${rowBg}`}>
                         <input
                           type="checkbox"
-                          checked={allSelected}
-                          onChange={() => {
-                            setSelectedIds(allSelected ? [] : responseIds);
+                          checked={selectedIds.includes(response.id)}
+                          onChange={(event) => {
+                            const checked = event.target.checked;
+                            setSelectedIds((prev) =>
+                              checked
+                                ? [...prev, response.id]
+                                : prev.filter((id) => id !== response.id)
+                            );
                           }}
-                          className="h-4 w-4 rounded border-[color:var(--color-border)] text-[color:var(--color-saffron)]"
+                          onClick={(event) => event.stopPropagation()}
+                          className="h-4.5 w-4.5 accent-[color:var(--color-saffron)] rounded-none border-2 border-black shadow-[1px_1px_0_0_#000] cursor-pointer"
                         />
-                        Select
-                      </label>
-                    </th>
-                    <th className="px-4 py-3 text-[10px] font-semibold uppercase tracking-[0.18em] text-[color:var(--color-muted)]">
-                      Submitted
-                    </th>
-                    {columns.map((field) => (
-                      <th key={field.id} className="px-4 py-3 text-[10px] font-semibold uppercase tracking-[0.18em] text-[color:var(--color-muted)]">
-                        {field.label}
-                      </th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {responses.map((response) => {
-                    const isSelected = response.id === selectedId;
-                    return (
-                      <tr
-                        key={response.id}
-                        onClick={() => selectRow(response.id)}
-                        aria-selected={isSelected}
-                        className={`cursor-pointer border-t-2 border-black align-top transition-colors ${
-                           isSelected
-                             ? "bg-[color:var(--color-accent)]"
-                             : "hover:bg-[color:var(--color-cream)]/50"
-                         }`}
+                      </td>
+                      <td
+                        className={`min-w-[108px] px-3 py-3 text-xs leading-5 md:px-4 md:text-sm ${
+                          isRowSelected
+                            ? "font-semibold text-[color:var(--color-saffron)]"
+                            : "text-[color:var(--color-dark)]"
+                        } ${rowBg}`}
                       >
-                        <td className="px-4 py-3">
-                          <input
-                            type="checkbox"
-                            checked={selectedIds.includes(response.id)}
-                            onChange={(event) => {
-                              const checked = event.target.checked;
-                              setSelectedIds((prev) =>
-                                checked
-                                  ? [...prev, response.id]
-                                  : prev.filter((id) => id !== response.id)
-                              );
-                            }}
-                            onClick={(event) => event.stopPropagation()}
-                            className="h-4.5 w-4.5 accent-[color:var(--color-saffron)] rounded-none border-2 border-black shadow-[1px_1px_0_0_#000] cursor-pointer"
-                          />
-                        </td>
-                        <td className={`px-4 py-3 text-sm ${isSelected ? "font-semibold text-[color:var(--color-saffron)]" : "text-[color:var(--color-dark)]"}`}>
-                          {formatShortDate(response.submittedAt)}
-                        </td>
-                        {columns.map((field) => {
-                          const value = getFieldValue(response.data, field);
-                          const rendered = renderValue(value);
-                          const textValue = typeof value === "string" ? value : undefined;
+                        {formatShortDate(response.submittedAt)}
+                      </td>
+                      {columns.map((field) => {
+                        const value = getFieldValue(response.data, field);
+                        const textValue = typeof value === "string" ? value : undefined;
 
-                          return (
-                            <td
-                              key={`${response.id}-${field.id}`}
-                              title={textValue}
-                              className="max-w-[200px] truncate px-4 py-3 text-sm text-[color:var(--color-muted)]"
-                            >
-                              {rendered}
-                            </td>
-                          );
-                        })}
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
+                        return (
+                          <td
+                            key={`${response.id}-${field.id}`}
+                            title={textValue}
+                            className="min-w-[140px] max-w-[220px] px-3 py-3 text-xs leading-5 break-words text-[color:var(--color-dark)] md:max-w-[200px] md:truncate md:px-4 md:text-sm md:text-[color:var(--color-muted)]"
+                          >
+                            {renderValue(value)}
+                          </td>
+                        );
+                      })}
+                      {extraColumnKeys.map((key) => {
+                        const value = response.data[key];
+                        const textValue = typeof value === "string" ? value : undefined;
+
+                        return (
+                          <td
+                            key={`${response.id}-${key}`}
+                            title={textValue}
+                            className="min-w-[140px] max-w-[220px] px-3 py-3 text-xs leading-5 break-words text-[color:var(--color-dark)] md:max-w-[200px] md:truncate md:px-4 md:text-sm md:text-[color:var(--color-muted)]"
+                          >
+                            {renderValue(value)}
+                          </td>
+                        );
+                      })}
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
           </div>
         </div>
       </section>
 
       {selected && (
-        <aside className="order-2 rounded-[20px] border-2 border-black bg-[color:var(--color-card)] p-5 shadow-[4px_4px_0_0_#000] xl:sticky xl:top-6 xl:self-start">
+        <aside className="order-2 hidden rounded-[20px] border-2 border-black bg-[color:var(--color-card)] p-5 shadow-[4px_4px_0_0_#000] md:block xl:sticky xl:top-6 xl:self-start">
           <div className="mb-4 flex items-start justify-between gap-3">
-            <div>
+            <div className="min-w-0">
               <h2 className="font-serif text-xl text-[color:var(--color-dark)]">
                 Submission detail
               </h2>
@@ -292,44 +341,23 @@ export function ResponseViewer({
                 {formatDate(selected.submittedAt)}
               </p>
             </div>
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-[color:rgba(21,128,61,0.1)] px-3 py-1 text-xs font-semibold text-[#166534]">
+            <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-[color:rgba(21,128,61,0.1)] px-3 py-1 text-xs font-semibold text-[#166534]">
               <span className="h-1.5 w-1.5 rounded-full bg-[#15803D]" />
               Received
             </span>
           </div>
 
           <div className="space-y-3">
-            {Object.entries(selected.data).map(([key, value]) => (
+            {detailItems.map((item, index) => (
               <div
-                key={key}
+                key={`${item.label}-${index}`}
                 className="rounded-[10px] border-2 border-black bg-[color:var(--color-card)] p-3.5 shadow-[2px_2px_0_0_#000]"
               >
                 <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[color:var(--color-muted)]">
-                  {key}
+                  {item.label}
                 </p>
-                <div className="mt-1.5 text-sm leading-6 text-[color:var(--color-dark)]">
-                  {isUrl(value) ? (
-                    <div className="space-y-2">
-                      {isImageUrl(value) && (
-                        // eslint-disable-next-line @next/next/no-img-element
-                        <img
-                          src={value}
-                          alt={key}
-                          className="h-auto max-h-48 w-full rounded-[10px] border border-[color:var(--color-border)] object-cover"
-                        />
-                      )}
-                      <a
-                        href={value}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="inline-flex items-center gap-1 text-[color:var(--color-saffron)] underline-offset-2 hover:underline"
-                      >
-                        Open file
-                      </a>
-                    </div>
-                  ) : (
-                    renderValue(value)
-                  )}
+                <div className="mt-1.5">
+                  <DetailValue label={item.label} value={item.value} />
                 </div>
               </div>
             ))}

@@ -28,7 +28,7 @@ export default async function ResponsesPage({
           description="Review submissions in a spreadsheet-style table. Click any row to inspect the full submission."
         />
 
-        <AdminCard className="space-y-6">
+        <AdminCard className="min-w-0 space-y-6 overflow-hidden">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             <div className="flex flex-wrap items-center gap-3">
               <TeamBadge team={form.team} />

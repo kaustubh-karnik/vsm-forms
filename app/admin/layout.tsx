@@ -1,6 +1,10 @@
 import Link from "next/link";
 
 import { AdminSidebar } from "@/app/components/admin-sidebar";
+
+// Always fetch fresh form/response counts — never serve a stale static snapshot.
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 import { AdminMobileNav } from "@/app/components/admin-mobile-nav";
 import { VsmLogo } from "@/app/components/vsm-ui";
 

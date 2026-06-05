@@ -1,5 +1,6 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 import { submitFormResponse } from "@/lib/supabase";
@@ -66,6 +67,12 @@ export async function submitForm(formId: string, formData: FormData) {
   }
 
   await submitFormResponse(formId, raw);
+
+  revalidatePath("/admin");
+  revalidatePath("/admin/forms");
+  revalidatePath("/admin/analytics");
+  revalidatePath(`/admin/forms/${formId}/responses`);
+  revalidatePath(`/admin/forms/${formId}`);
 
   const firstName = (raw["Full Name"] as string | undefined)?.split(" ")[0] ?? "";
   redirect(`/forms/${formId}/success?name=${encodeURIComponent(firstName)}`);

@@ -1,4 +1,5 @@
 import { randomUUID } from 'crypto';
+import { unstable_noStore as noStore } from 'next/cache';
 import { createClient } from '@supabase/supabase-js';
 
 import { supabaseAdmin } from './supabase-server';
@@ -104,6 +105,7 @@ export interface FormResponse {
 }
 
 export async function getAllForms(): Promise<VSMForm[]> {
+  noStore();
   const { data, error } = await supabase
     .from('forms')
     .select('*')
@@ -143,6 +145,7 @@ export async function getFormById(id: string): Promise<VSMForm | null> {
 }
 
 export async function getFormResponses(formId: string): Promise<FormResponse[]> {
+  noStore();
   const { data, error } = await supabaseAdmin
     .from('responses')
     .select('*')
@@ -184,6 +187,7 @@ export async function submitFormResponse(
 }
 
 export async function getAnalytics() {
+  noStore();
   const { data: forms, error: formsError } = await supabase
     .from('forms')
     .select('*');

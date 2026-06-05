@@ -3,6 +3,7 @@
 import React, { useEffect, useMemo, useState, useTransition } from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 
+import { getFieldValue } from "@/lib/response-data";
 import type { VSMForm, FormResponse } from "@/lib/supabase";
 import { deleteResponses } from "@/app/actions/response-actions";
 
@@ -76,7 +77,7 @@ export function ResponseViewer({
     router.replace(`${pathname}?${params.toString()}`, { scroll: false });
   }
 
-  const columns = form.fields.map((f) => f.label);
+  const columns = form.fields;
   const responseIds = useMemo(() => responses.map((response) => response.id), [responses]);
   const allSelected = responseIds.length > 0 && selectedIds.length === responseIds.length;
   const selectedCount = selectedIds.length;
@@ -156,7 +157,7 @@ export function ResponseViewer({
                   <div className="flex items-start justify-between gap-3">
                     <div>
                       <p className="text-sm font-semibold text-[color:var(--color-dark)]">
-                        {renderValue(response.data[columns[0]])}
+                        {renderValue(getFieldValue(response.data, columns[0]))}
                       </p>
                       <p className="mt-1 text-xs text-[color:var(--color-muted)]">
                         {formatShortDate(response.submittedAt)}
@@ -178,13 +179,13 @@ export function ResponseViewer({
                     />
                   </div>
                   <div className="mt-3 grid gap-1 text-xs text-[color:var(--color-muted)]">
-                    {columns.slice(1, 3).map((col) => (
-                      <div key={col} className="flex items-center justify-between gap-2">
+                    {columns.slice(1, 3).map((field) => (
+                      <div key={field.id} className="flex items-center justify-between gap-2">
                         <span className="font-semibold uppercase tracking-[0.16em] text-[10px] text-[color:var(--color-muted)]">
-                          {col}
+                          {field.label}
                         </span>
                         <span className="max-w-[60%] truncate text-right">
-                          {renderValue(response.data[col])}
+                          {renderValue(getFieldValue(response.data, field))}
                         </span>
                       </div>
                     ))}
@@ -215,9 +216,9 @@ export function ResponseViewer({
                     <th className="px-4 py-3 text-[10px] font-semibold uppercase tracking-[0.18em] text-[color:var(--color-muted)]">
                       Submitted
                     </th>
-                    {columns.map((col) => (
-                      <th key={col} className="px-4 py-3 text-[10px] font-semibold uppercase tracking-[0.18em] text-[color:var(--color-muted)]">
-                        {col}
+                    {columns.map((field) => (
+                      <th key={field.id} className="px-4 py-3 text-[10px] font-semibold uppercase tracking-[0.18em] text-[color:var(--color-muted)]">
+                        {field.label}
                       </th>
                     ))}
                   </tr>
@@ -255,13 +256,14 @@ export function ResponseViewer({
                         <td className={`px-4 py-3 text-sm ${isSelected ? "font-semibold text-[color:var(--color-saffron)]" : "text-[color:var(--color-dark)]"}`}>
                           {formatShortDate(response.submittedAt)}
                         </td>
-                        {columns.map((col) => {
-                          const rendered = renderValue(response.data[col]);
-                          const textValue = typeof response.data[col] === "string" ? response.data[col] : undefined;
+                        {columns.map((field) => {
+                          const value = getFieldValue(response.data, field);
+                          const rendered = renderValue(value);
+                          const textValue = typeof value === "string" ? value : undefined;
 
                           return (
                             <td
-                              key={`${response.id}-${col}`}
+                              key={`${response.id}-${field.id}`}
                               title={textValue}
                               className="max-w-[200px] truncate px-4 py-3 text-sm text-[color:var(--color-muted)]"
                             >

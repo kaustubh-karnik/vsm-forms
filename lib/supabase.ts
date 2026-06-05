@@ -1,6 +1,8 @@
 import { randomUUID } from 'crypto';
 import { createClient } from '@supabase/supabase-js';
 
+import { supabaseAdmin } from './supabase-server';
+
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
@@ -109,7 +111,7 @@ export async function getAllForms(): Promise<VSMForm[]> {
 
   if (error) throw error;
 
-  const { data: responses, error: responsesError } = await supabase
+  const { data: responses, error: responsesError } = await supabaseAdmin
     .from('responses')
     .select('formId');
 
@@ -141,7 +143,7 @@ export async function getFormById(id: string): Promise<VSMForm | null> {
 }
 
 export async function getFormResponses(formId: string): Promise<FormResponse[]> {
-  const { data, error } = await supabase
+  const { data, error } = await supabaseAdmin
     .from('responses')
     .select('*')
     .eq('formId', formId)
@@ -152,7 +154,7 @@ export async function getFormResponses(formId: string): Promise<FormResponse[]> 
 }
 
 export async function getResponseById(id: string): Promise<FormResponse | null> {
-  const { data, error } = await supabase
+  const { data, error } = await supabaseAdmin
     .from('responses')
     .select('*')
     .eq('id', id)
@@ -188,14 +190,14 @@ export async function getAnalytics() {
 
   if (formsError) throw formsError;
 
-  const { data: responses, error: responsesError } = await supabase
+  const { data: responses, error: responsesError } = await supabaseAdmin
     .from('responses')
     .select('*');
 
   if (responsesError) throw responsesError;
 
   const monthlyResponses = calculateMonthlyResponses(responses || []);
-  const teamDistribution = calculateTeamDistribution(forms || []);
+  const teamDistribution = calculateTeamDistribution(forms || [], responses || []);
   const teamTable = calculateTeamTable(forms || [], responses || []);
 
   return { monthlyResponses, teamDistribution, teamTable };
@@ -214,10 +216,13 @@ function calculateMonthlyResponses(responses: FormResponse[]) {
   return months.map((month) => ({ month, count: monthMap[month] || 0 }));
 }
 
-function calculateTeamDistribution(forms: VSMForm[]) {
+function calculateTeamDistribution(forms: VSMForm[], responses: FormResponse[]) {
   const teamMap: Record<string, number> = {};
-  forms.forEach((form) => {
-    teamMap[form.team] = (teamMap[form.team] || 0) + form.responseCount;
+  responses.forEach((response) => {
+    const form = forms.find((f) => f.id === response.formId);
+    if (form) {
+      teamMap[form.team] = (teamMap[form.team] || 0) + 1;
+    }
   });
   return Object.entries(teamMap).map(([team, count]) => ({ team: team as Team, count }));
 }

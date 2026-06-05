@@ -23,8 +23,74 @@ export default async function Home() {
     <main className="relative min-h-screen overflow-hidden px-4 py-12 sm:py-16">
       <div className="mx-auto flex w-full max-w-[560px] bg- flex-col items-center gap-8">
 
+        {/* Active Initiatives Section */}
+        <div className="fade-up fade-up-1 w-full space-y-6">
+          <SectionDivider label="Active Initiatives" className="justify-center" />
+
+          <div className="space-y-4">
+            {activeForms.length > 0 ? (
+              activeForms.map((form) => (
+                <Link key={form.id} href={`/forms/${form.id}`} className="block">
+                  <Card className="block overflow-hidden rounded-[20px] border-2 border-[color:var(--color-border)] bg-white p-0 shadow-[4px_4px_0_0_var(--border)] transition-all duration-200 hover:shadow-[6px_6px_0_0_var(--border)] hover:translate-y-[-2px] active:shadow-none active:translate-y-[2px]">
+                    <div className="grid grid-cols-[100px_1fr] sm:grid-cols-[140px_1fr] items-stretch">
+                      {/* Left: poster side-cover, always side-by-side */}
+                      <div className="relative w-full h-full min-h-[120px]">
+                        <FormCover
+                          form={form}
+                          poster={true}
+                          roundedClass="rounded-l-[18px] rounded-r-none"
+                          className="absolute inset-0 h-full w-full"
+                          showOverlay={false}
+                        />
+                      </div>
+
+                      {/* Right: Details */}
+                      <div className="flex flex-col justify-between p-3 sm:p-4 gap-2.5 h-full min-w-0">
+                        <div className="space-y-1">
+                          <Text as="h2" className="text-sm sm:text-base font-bold leading-tight text-[color:var(--color-dark)] line-clamp-1 sm:line-clamp-2">
+                            {form.title}
+                          </Text>
+                          <Text as="p" className="text-xs sm:text-sm text-[color:var(--color-dark)]/80 line-clamp-2 leading-snug">
+                            {form.description}
+                          </Text>
+                        </div>
+
+                        <div className="mt-auto space-y-2.5">
+                          {form.closingDate && getDeadlineState(form.closingDate) && (
+                            <DeadlinePill deadline={getDeadlineState(form.closingDate)!} />
+                          )}
+
+                          <Button
+                            variant="default"
+                            size="sm"
+                            className="w-full h-10 sm:h-11 px-4 text-sm sm:text-base font-bold border-2 border-black bg-primary text-white shadow-[3px_3px_0_0_#000] hover:shadow-[2px_2px_0_0_#000] hover:translate-y-[1px] active:translate-y-[2px] active:shadow-none transition-all"
+                            asChild
+                          >
+                            <span className="inline-flex w-full items-center justify-center gap-1.5 leading-none">
+                              <span className="leading-none">Register</span>
+                              <svg className="block h-4 w-4 stroke-[2.5px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden>
+                                <polyline points="9 18 15 12 9 6" />
+                              </svg>
+                            </span>
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  </Card>
+                </Link>
+              ))
+            ) : (
+              <Card className="block rounded-[20px] border-2 border-[color:var(--color-border)] bg-white p-6 text-center shadow-[4px_4px_0_0_var(--border)]">
+                <Text as="p" className="text-[color:var(--color-dark)]">
+                  No active forms at the moment. Check back soon!
+                </Text>
+              </Card>
+            )}
+          </div>
+        </div>
+
         {/* Logo & Branding Section - Redesigned as a Premium Neobrutalist Profile Card */}
-        <div className="fade-up fade-up-1 w-full overflow-hidden rounded-[28px] border-2 border-black bg-(--color-card) shadow-[6px_6px_0_0_#000] relative">
+        <div className="fade-up fade-up-2 w-full overflow-hidden rounded-[28px] border-2 border-black bg-(--color-card) shadow-[6px_6px_0_0_#000] relative">
           {/* Accent header bar with retro window control dots and a badge */}
           <div className="h-16 w-full border-b-2 border-black bg-saffron relative overflow-hidden flex items-center justify-between px-6">
             {/* Retro dots pattern overlay */}
@@ -76,75 +142,6 @@ export default async function Home() {
             <div className="pt-4 w-full flex justify-center border-t border-dashed border-border mt-1">
               <SocialLinks />
             </div>
-          </div>
-        </div>
-
-        {/* Active Initiatives Section */}
-        <div className="w-full space-y-6">
-          <SectionDivider label="Active Initiatives" className="justify-center" />
-
-          <div className="space-y-4">
-            {activeForms.length > 0 ? (
-              activeForms.map((form) => (
-                <Link key={form.id} href={`/forms/${form.id}`} className="block">
-                  <Card className="block overflow-hidden rounded-[20px] border-2 border-[color:var(--color-border)] bg-white p-0 shadow-[4px_4px_0_0_var(--border)] transition-all duration-200 hover:shadow-[6px_6px_0_0_var(--border)] hover:translate-y-[-2px] active:shadow-none active:translate-y-[2px]">
-                    <div className="grid grid-cols-[100px_1fr] sm:grid-cols-[140px_1fr] items-stretch">
-                      {/* Left: poster side-cover, always side-by-side */}
-                      <div className="relative w-full h-full min-h-[120px]">
-                        <FormCover
-                          form={form}
-                          poster={true}
-                          roundedClass="rounded-l-[18px] rounded-r-none"
-                          className="absolute inset-0 h-full w-full"
-                          showOverlay={false}
-                        />
-                      </div>
-
-                      {/* Right: Details */}
-                      <div className="flex flex-col justify-between p-3 sm:p-4 gap-2.5 h-full min-w-0">
-                        <div className="space-y-1">
-                          <Text as="h2" className="text-sm sm:text-base font-bold leading-tight text-[color:var(--color-dark)] line-clamp-1 sm:line-clamp-2">
-                            {form.title}
-                          </Text>
-                          <Text as="p" className="text-xs sm:text-sm text-[color:var(--color-dark)]/80 line-clamp-2 leading-snug">
-                            {form.description}
-                          </Text>
-                        </div>
-
-                        {/* Badges & Action Button in one compact row */}
-                        <div className="flex items-center justify-between gap-2 mt-auto">
-                          <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 min-w-0">
-                            {form.closingDate && getDeadlineState(form.closingDate) && (
-                              <DeadlinePill deadline={getDeadlineState(form.closingDate)!} />
-                            )}
-                          </div>
-
-                          <Button
-                            variant="default"
-                            size="sm"
-                            className="shrink-0 h-8 px-2.5 sm:px-3.5 text-xs font-bold border-2 border-black bg-primary text-white shadow-[2px_2px_0_0_#000] hover:shadow-[1px_1px_0_0_#000] hover:translate-y-[1px] active:translate-y-[2px] active:shadow-none transition-all"
-                            asChild
-                          >
-                            <span className="inline-flex items-center gap-1 leading-none">
-                              <span className="leading-none">Register</span>
-                              {/* <svg className="block h-3.5 w-3.5 stroke-[2.5px]" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                <polyline points="9 18 15 12 9 6" />
-                              </svg> */}
-                            </span>
-                          </Button>
-                        </div>
-                      </div>
-                    </div>
-                  </Card>
-                </Link>
-              ))
-            ) : (
-              <Card className="block rounded-[20px] border-2 border-[color:var(--color-border)] bg-white p-6 text-center shadow-[4px_4px_0_0_var(--border)]">
-                <Text as="p" className="text-[color:var(--color-dark)]">
-                  No active forms at the moment. Check back soon!
-                </Text>
-              </Card>
-            )}
           </div>
         </div>
 

@@ -1,8 +1,12 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useTransition } from "react";
 
 import { ResponseViewer } from "@/app/admin/forms/[id]/responses/response-viewer";
+import {
+  exportResponsesToExcel,
+  exportResponsesToPdf,
+} from "@/lib/export-responses";
 import type { FormResponse, VSMForm } from "@/lib/supabase";
 
 export function ResponsesPanel({
@@ -13,6 +17,7 @@ export function ResponsesPanel({
   responses: FormResponse[];
 }) {
   const [searchQuery, setSearchQuery] = useState("");
+  const [isExporting, startExport] = useTransition();
 
   const filteredResponses = useMemo(() => {
     if (!searchQuery.trim()) return responses;
@@ -52,10 +57,28 @@ export function ResponsesPanel({
           </label>
         </div>
         <div className="flex flex-wrap items-center justify-start gap-3 lg:justify-end">
-          <button className="rounded-[10px] border-2 border-black bg-[color:var(--color-cream)] px-4 py-2 text-sm font-bold text-[color:var(--color-dark)] shadow-[2px_2px_0_0_#000] transition-all hover:-translate-y-px hover:shadow-[3px_3px_0_0_#000] active:translate-y-0 active:shadow-none hover:text-[color:var(--color-saffron)]">
+          <button
+            type="button"
+            disabled={filteredResponses.length === 0 || isExporting}
+            onClick={() => {
+              startExport(async () => {
+                await exportResponsesToExcel(form, filteredResponses);
+              });
+            }}
+            className="rounded-[10px] border-2 border-black bg-[color:var(--color-cream)] px-4 py-2 text-sm font-bold text-[color:var(--color-dark)] shadow-[2px_2px_0_0_#000] transition-all hover:-translate-y-px hover:shadow-[3px_3px_0_0_#000] active:translate-y-0 active:shadow-none hover:text-[color:var(--color-saffron)] disabled:cursor-not-allowed disabled:opacity-60"
+          >
             Export Excel
           </button>
-          <button className="rounded-[10px] border-2 border-black bg-[color:var(--color-cream)] px-4 py-2 text-sm font-bold text-[color:var(--color-dark)] shadow-[2px_2px_0_0_#000] transition-all hover:-translate-y-px hover:shadow-[3px_3px_0_0_#000] active:translate-y-0 active:shadow-none hover:text-[color:var(--color-saffron)]">
+          <button
+            type="button"
+            disabled={filteredResponses.length === 0 || isExporting}
+            onClick={() => {
+              startExport(async () => {
+                await exportResponsesToPdf(form, filteredResponses);
+              });
+            }}
+            className="rounded-[10px] border-2 border-black bg-[color:var(--color-cream)] px-4 py-2 text-sm font-bold text-[color:var(--color-dark)] shadow-[2px_2px_0_0_#000] transition-all hover:-translate-y-px hover:shadow-[3px_3px_0_0_#000] active:translate-y-0 active:shadow-none hover:text-[color:var(--color-saffron)] disabled:cursor-not-allowed disabled:opacity-60"
+          >
             Export PDF
           </button>
         </div>
